@@ -54,6 +54,12 @@ Spaceship >> decreaseFuelBy: anAmount [
     fuel := (fuel - anAmount) max: 0.
 ]
 
+{ #category : 'methods' }
+Spaceship >> decreaseTurbine [
+
+	turbines := turbines - 1
+]
+
 { #category : 'initialize' }
 Spaceship >> hasReachedGoalOn: aBoard [
 
