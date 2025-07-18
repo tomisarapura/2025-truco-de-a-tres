@@ -116,6 +116,16 @@ SpaceshipTest >> testInitializeInPositionZero [
 ]
 
 { #category : 'tests - instance' }
+SpaceshipTest >> testInitializeSetsTurbinesToThree [
+
+	| player |
+	
+	player := Spaceship withName: 'JohnDoe'.
+	
+	self assert: player turbines equals: 3. 
+]
+
+{ #category : 'tests - instance' }
 SpaceshipTest >> testInitializeWithEmptyNameRaisesError [
 
     self should: [ Spaceship withName: '' ] raise: Error.
@@ -187,7 +197,7 @@ SpaceshipTest >> testNameReturnsGivenName [
     self assert: ship name equals: 'Named'.
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'penalty' }
 SpaceshipTest >> testPenalizeForChangesState [
 
     | ship |
@@ -199,7 +209,7 @@ SpaceshipTest >> testPenalizeForChangesState [
     self assert: ship penaltyTurnsRemaining equals: 3.
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'penalty' }
 SpaceshipTest >> testPenaltyTurnsRemainingDelegatesToState [
 
     | ship |

@@ -15,7 +15,6 @@ PenalizedShipStateTest >> should: anErrorBlock raise: anErrorClass withMessageTe
             self assert: error messageText equals: errorMessage ].
 ]
 
-
 { #category : 'tests' }
 PenalizedShipStateTest >> testDecreaseTurn [
 
@@ -42,7 +41,6 @@ PenalizedShipStateTest >> testForTurnsRaisesErrorWhenInvalid [
 ]
 
 { #category : 'tests' }
-
 PenalizedShipStateTest >> testInitializationWithPenalty [
 
     | penalized |
@@ -92,7 +90,6 @@ PenalizedShipStateTest >> testPenalizeForRaisesErrorWhenInvalid [
 ]
 
 { #category : 'tests' }
-
 PenalizedShipStateTest >> testPenalizeForSetsTurns [
 
     | penalized |
@@ -159,4 +156,3 @@ PenalizedShipStateTest >> testWhenPenalizedDoEvaluatesPenalizedBlock [
 
     self assert: executed.
 ]
-
