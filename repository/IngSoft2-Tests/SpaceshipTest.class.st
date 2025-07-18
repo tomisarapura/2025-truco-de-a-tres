@@ -119,10 +119,9 @@ SpaceshipTest >> testInitializeInPositionZero [
 SpaceshipTest >> testInitializeSetsTurbinesToThree [
 
 	| player |
-	
 	player := Spaceship withName: 'JohnDoe'.
-	
-	self assert: player turbines equals: 3. 
+
+	self assert: player remainingTurbines equals: 3
 ]
 
 { #category : 'tests - instance' }

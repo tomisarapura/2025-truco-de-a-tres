@@ -10,7 +10,7 @@ Class {
 		'cards',
 		'activeCards',
 		'state',
-		'turbine'
+		'turbines'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -77,7 +77,7 @@ Spaceship >> initializeWith: aName [
 	cards := OrderedCollection new.
 	activeCards := OrderedCollection new.
 	state := NormalShipState new.
-	turbine := 3
+	turbines := 3
 ]
 
 { #category : 'state' }
@@ -151,6 +151,12 @@ Spaceship >> reducePenalty [
 
 	state := state reducePenalty
 
+]
+
+{ #category : 'accessing' }
+Spaceship >> remainingTurbines [
+
+	^ turbines
 ]
 
 { #category : 'cards' }
