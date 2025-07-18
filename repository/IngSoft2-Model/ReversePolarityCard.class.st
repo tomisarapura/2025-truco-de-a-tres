@@ -20,6 +20,12 @@ ReversePolarityCard class >> forCell: aCell [
 	^ self new initializeForCell: aCell
 ]
 
+{ #category : 'playing' }
+ReversePolarityCard >> activateFor: aShip inGame: aGame [
+
+	aShip addActiveCard: self
+]
+
 { #category : 'initialize' }
 ReversePolarityCard >> initializeForCell: aCell [
 
