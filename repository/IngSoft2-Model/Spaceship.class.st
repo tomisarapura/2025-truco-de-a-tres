@@ -51,7 +51,14 @@ Spaceship >> cards [
 
 { #category : 'fuel' }
 Spaceship >> decreaseFuelBy: anAmount [
-    fuel := (fuel - anAmount) max: 0.
+
+	| newFuel |
+	newFuel := fuel - anAmount.
+	newFuel <= 0
+		ifTrue: [
+			self decreaseTurbine.
+			fuel := maxFuel ]
+		ifFalse: [ fuel := newFuel ]
 ]
 
 { #category : 'methods' }
