@@ -7,7 +7,9 @@ Class {
 
 { #category : 'operations' }
 BlackHoleEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
-    | board |
-    board := aBoard ifNil: [ NullBoard new ] ifNotNil: [ aBoard ].
-    board moveShip: aSpaceship backward: 4.
+
+	| board |
+	aSpaceship decreaseTurbine.
+	board := aBoard ifNil: [ NullBoard new ] ifNotNil: [ aBoard ].
+	board moveShip: aSpaceship backward: 4
 ]
