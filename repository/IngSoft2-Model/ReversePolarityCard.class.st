@@ -15,6 +15,12 @@ ReversePolarityCard class >> for: aCell [
 ]
 
 { #category : 'initialize' }
+ReversePolarityCard class >> forCell: aCell [
+
+	^ self new initializeForCell: aCell
+]
+
+{ #category : 'initialize' }
 ReversePolarityCard >> initializeForCell: aCell [
 
 	targetCell := aCell.
