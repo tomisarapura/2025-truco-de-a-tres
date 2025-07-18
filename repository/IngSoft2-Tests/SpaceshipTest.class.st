@@ -312,3 +312,14 @@ SpaceshipTest >> testStateSetterChangesState [
 
     self assert: ship state equals: newState.
 ]
+
+{ #category : 'tests - instance' }
+SpaceshipTest >> testWhenTurbineIsZeroAndDecrementIsAttempted [
+
+	| ship |
+	ship := Spaceship withName: 'JohnDoe'.
+	ship decreaseTurbine.
+	ship decreaseTurbine.
+	ship decreaseTurbine.
+	self should: [ship decreaseTurbine] raise: Error.
+]
