@@ -163,6 +163,17 @@ SpaceshipTest >> testLapAccessorReturnsCurrentValue [
 ]
 
 { #category : 'tests - instance' }
+SpaceshipTest >> testLosingAllFuelResultsInTurbineLoss [
+
+	| ship |
+	ship := Spaceship withName: 'John Doe'.
+	ship instVarNamed: 'fuel' put: 3.
+	self assert: ship remainingTurbines equals: 3.
+	ship decreaseFuelBy: 3.
+	self assert: ship remainingTurbines equals: 2
+]
+
+{ #category : 'tests - instance' }
 SpaceshipTest >> testMoveBackDoesNotGoBelowZero [
 
     | ship |
