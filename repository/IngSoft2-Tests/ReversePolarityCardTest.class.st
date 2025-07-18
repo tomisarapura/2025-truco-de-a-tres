@@ -38,6 +38,33 @@ ReversePolarityCardTest >> testCreateCardWithTargetCell [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testInvertedAtomicBombAffectsNobody [
+
+	| card cell ship otherShip board game |
+	cell := 7.
+	card := ReversePolarityCard forCell: cell.
+	ship := Spaceship withName: 'John Doe'.
+	otherShip := Spaceship withName: 'Jane Doe'.
+	board := Board of: 10 andWormholeAt: {  }.
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	ship moveTo: 3.
+	otherShip moveTo: 8.
+	card activateFor: ship inGame: game.
+	board moveShip: ship to: cell.
+	board applyEffectTo: ship.
+
+	self assert: ship position equals: cell.
+	self assert: otherShip position equals: 8
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
 
 	| card cell ship otherShip board game |
