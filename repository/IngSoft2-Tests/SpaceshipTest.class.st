@@ -5,7 +5,7 @@ Class {
 	#package : 'IngSoft2-Tests'
 }
 
-{ #category : 'tests - instance' }
+{ #category : 'cards' }
 SpaceshipTest >> testActiveCardsStartsEmpty [
 
     | ship |
@@ -15,7 +15,7 @@ SpaceshipTest >> testActiveCardsStartsEmpty [
     self assert: ship activeCards isEmpty.
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'cards' }
 SpaceshipTest >> testAddActiveCardAddsCard [
 
     | ship card |
@@ -27,7 +27,7 @@ SpaceshipTest >> testAddActiveCardAddsCard [
     self assert: (ship activeCards includes: card).
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'cards' }
 SpaceshipTest >> testAddCardAddsToHand [
 
     | ship card |
@@ -39,7 +39,7 @@ SpaceshipTest >> testAddCardAddsToHand [
     self assert: (ship cards includes: card).
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'cards' }
 SpaceshipTest >> testCardsReturnsCurrentCards [
 
     | ship card |
@@ -63,6 +63,15 @@ SpaceshipTest >> testDecreaseFuelByDoesNotGoBelowZero [
     self assert: (ship instVarNamed: 'fuel') equals: 2.
     ship decreaseFuelBy: 10.
     self assert: (ship instVarNamed: 'fuel') equals: 0.
+]
+
+{ #category : 'tests - instance' }
+SpaceshipTest >> testDecreaseTurbineReducesTurbinesByOne [
+
+	| ship |
+	ship := Spaceship withName: 'JohnDoe'.
+	ship decreaseTurbine.
+	self assert: ship remainingTurbines equals: 2
 ]
 
 { #category : 'tests - instance' }
@@ -105,7 +114,7 @@ SpaceshipTest >> testIncreaseMaxFuelByAddsAmount [
     self assert: (ship instVarNamed: 'maxFuel') equals: 7.
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'initalize' }
 SpaceshipTest >> testInitializeInPositionZero [
 
 	| player |
@@ -115,7 +124,7 @@ SpaceshipTest >> testInitializeInPositionZero [
 	self assert: player position equals: 0. 
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'initalize' }
 SpaceshipTest >> testInitializeSetsTurbinesToThree [
 
 	| player |
@@ -124,7 +133,7 @@ SpaceshipTest >> testInitializeSetsTurbinesToThree [
 	self assert: player remainingTurbines equals: 3
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'initalize' }
 SpaceshipTest >> testInitializeWithEmptyNameRaisesError [
 
     self should: [ Spaceship withName: '' ] raise: Error.
@@ -219,7 +228,7 @@ SpaceshipTest >> testPenaltyTurnsRemainingDelegatesToState [
     self assert: ship penaltyTurnsRemaining equals: 5.
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'cards' }
 SpaceshipTest >> testPlayCardNotInHandRaisesError [
 
     | ship otherShip card board dice game |
@@ -235,7 +244,7 @@ SpaceshipTest >> testPlayCardNotInHandRaisesError [
     self should: [ ship playCard: card inGame: game ] raise: Error.
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'cards' }
 SpaceshipTest >> testPlayCardRemovesFromHandAndRecords [
 
     | ship otherShip card board dice game |
@@ -268,7 +277,7 @@ SpaceshipTest >> testReducePenaltyRemovesPenaltyWhenTurnsFinish [
     self assert: ship state class equals: NormalShipState.
 ]
 
-{ #category : 'tests - instance' }
+{ #category : 'cards' }
 SpaceshipTest >> testRemoveCardRemovesFromHand [
 
     | ship card |
