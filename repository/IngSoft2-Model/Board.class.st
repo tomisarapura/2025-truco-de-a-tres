@@ -6,7 +6,8 @@ Class {
 		'wormholes',
 		'cells',
 		'totalLengthInParsecs',
-		'positionManager'
+		'positionManager',
+		'shipsOnBoard'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -101,22 +102,45 @@ Board class >> validateWormholes: aCollection [
 		self error: 'All wormholes must be valid objects' ]
 ]
 
-{ #category : 'initialize' }
-Board >> applyEffectTo: aSpaceship [
-    | effect |
+{ #category : 'method' }
+Board >> activeCardsOnCell: aCell [
 
-    effect := self effectAt: (self positionOf: aSpaceship).
-    effect ifNotNil: [ effect applyTo: aSpaceship inBoard: self ].
+	^ self reversePolarityCards select: [ :card |
+		  card targetCell = aCell ]
 ]
 
-{ #category : 'initialize' }
+{ #category : 'method' }
+Board >> allActiveCards [
+
+	| cards |
+	cards := OrderedCollection new.
+	shipsOnBoard do: [ :ship | cards addAll: ship activeCards ].
+	^ cards
+]
+
+{ #category : 'method' }
+Board >> applyEffectTo: aSpaceship [
+
+	| cellPosition effect shouldInvert |
+	cellPosition := self positionOf: aSpaceship.
+	effect := self effectAt: cellPosition.
+
+	shouldInvert := self isCellInverted: cellPosition.
+
+	shouldInvert
+		ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
+		ifFalse: [ effect applyTo: aSpaceship inBoard: self ].
+	^ self
+]
+
+{ #category : 'method' }
 Board >> applyWormholeIfPresentAt: aPosition [
     ^ (wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ])
         ifNil: [ aPosition ]
         ifNotNil: [ :w | w exit ]
 ]
 
-{ #category : 'initialize' }
+{ #category : 'moves' }
 Board >> calculateNewPositionFrom: current after: steps moves: aShipStatus [
 
 	| newPosition |
@@ -128,12 +152,12 @@ Board >> calculateNewPositionFrom: current after: steps moves: aShipStatus [
 	^ newPosition.
 ]
 
-{ #category : 'initialize' }
+{ #category : 'accessing' }
 Board >> cellCount [
     ^ cells size.
 ]
 
-{ #category : 'initialize' }
+{ #category : 'accessing' }
 Board >> cells [
 	^ cells.
 
@@ -151,9 +175,10 @@ Board >> drawCard [
     ^ CardDeck randomCard
 ]
 
-{ #category : 'initialize' }
+{ #category : 'method' }
 Board >> effectAt: aPosition [
-    ^ cells at: aPosition ifAbsent: [ NoEffect new ]
+
+	^ cells at: aPosition ifAbsent: [ NoEffect new ]
 ]
 
 { #category : 'initialize' }
@@ -177,7 +202,13 @@ Board >> initializeWithCells: aCount length: aLengthInParsecs andWormholes: aCol
     ^ self
 ]
 
-{ #category : 'initialize' }
+{ #category : 'method' }
+Board >> isCellInverted: aCell [
+
+    ^ (self activeCardsOnCell: aCell) size odd
+]
+
+{ #category : 'validation' }
 Board >> isPositionReachedAt: aPosition [
 
     ^ aPosition >= cellCount.
@@ -229,23 +260,38 @@ Board >> randomEffect [
 { #category : 'spaceships' }
 Board >> registerShips: someShips [
 
+	shipsOnBoard := someShips copy.
+
 	positionManager := PositionManager forShips: someShips
 ]
 
-{ #category : 'initialize' }
+{ #category : 'method' }
+Board >> reversePolarityCards [
+
+	^ self allActiveCards select: [ :card |
+		  card isKindOf: ReversePolarityCard ]
+]
+
+{ #category : 'accessing' }
+Board >> shipsOnBoard [
+
+	^ shipsOnBoard
+]
+
+{ #category : 'steps' }
 Board >> stepsFromDistance: aDistance [
 
     ^ self stepsFromParsecs: aDistance asParsecs
 ]
 
-{ #category : 'initialize' }
+{ #category : 'steps' }
 Board >> stepsFromLightYears: someLightYears [
 
 	^ self stepsFromParsecs:
 		  (Distance lightYears: someLightYears) asParsecs
 ]
 
-{ #category : 'initialize' }
+{ #category : 'steps' }
 Board >> stepsFromParsecs: someParsecs [
 
 	| ratio |

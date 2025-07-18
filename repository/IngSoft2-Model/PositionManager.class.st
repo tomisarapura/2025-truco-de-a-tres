@@ -59,3 +59,9 @@ PositionManager >> positionOf: aShip [
 
 	^ positions at: aShip
 ]
+
+{ #category : 'accessing' }
+PositionManager >> positions [
+
+	^ positions
+]
