@@ -41,3 +41,28 @@ HyperGravityEffectTest >> testApplyToMovesShipBackwardsOneStep [
 
     self assert: ship position equals: 4.
 ]
+
+{ #category : 'tests' }
+HyperGravityEffectTest >> testShipLosesTurbineWhenFailingToEscapeHyperGravity [
+
+	| ship1 ship2 players effect board game |
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
+	players := OrderedCollection new.
+	players add: ship1.
+	players add: ship2.
+	effect := HyperGravityEffect new.
+	board := Board of: 10 andWormholeAt: {  }.
+	game := Game
+		        startWithShips: players
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 6) })
+		        laps: 1.
+
+	effect requiredRoll: 5.
+
+	(effect allowsEntryWithRoll: 3) ifFalse: [
+		effect applyEffectTo: ship1 inBoard: board ].
+
+	self assert: ship1 remainingTurbines equals: 2
+]
