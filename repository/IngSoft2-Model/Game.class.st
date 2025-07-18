@@ -262,6 +262,7 @@ Game >> playTurn [
 
 	self ensureGameIsNotOver.
 	self handlePenaltyOrPassIfNeeded ifTrue: [ ^ self ].
+	self currentShip hasAvailableTurbines ifFalse: [ ^ self passTurn ].
 	self rollAndMoveCurrentShip.
 
 	self

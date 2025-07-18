@@ -103,23 +103,6 @@ GameTest >> testCurrentPlayerIndexMatchesTurnIndex [
 ]
 
 { #category : 'accessing' }
-GameTest >> testCurrentShipReturnsCorrectShip [
-
-    | ship1 ship2 board dice game |
-
-    ship1 := Spaceship withName: 'First'.
-    ship2 := Spaceship withName: 'Second'.
-    board := Board of: 10 andWormholeAt: {}.
-    dice := DiceCup with: { Die withSides: 1 }.
-
-    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
-
-    self assert: game currentShip equals: ship1.
-    game advanceTurn.
-    self assert: game currentShip equals: ship2.
-]
-
-{ #category : 'accessing' }
 GameTest >> testDieAccessorReturnsDiceCup [
     | ship1 ship2 board dice game |
     ship1 := Spaceship withName: 'S1'.
@@ -1019,6 +1002,28 @@ GameTest >> testShipStatusReturnsCurrentPosition [
 ]
 
 { #category : 'tests' }
+GameTest >> testShipWithZeroTurbinesSkipsTurn [
+
+	| ship1 ship2 board dice game |
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+
+	ship1 instVarNamed: 'turbines' put: 0.
+
+	game playTurn.
+	self assert: game currentShip equals: ship2
+]
+
+{ #category : 'tests' }
 GameTest >> testShipsStartWithTwoCards [
 	| ship1 ship2 board dice game |
     ship1 := Spaceship withName: 'One'.
@@ -1204,6 +1209,23 @@ GameTest >> testWhenAShipTriesToPlayOutOfTurnThenError [
 		should: [ game validateIsCurrentPlayer: spaceShip1]
 		raise: Error
 		withMessageText: 'It is not the turn of this spaceship'
+]
+
+{ #category : 'accessing' }
+GameTest >> testWhenCurrentShipReturnsCorrectShip [
+
+    | ship1 ship2 board dice game |
+
+    ship1 := Spaceship withName: 'First'.
+    ship2 := Spaceship withName: 'Second'.
+    board := Board of: 10 andWormholeAt: {}.
+    dice := DiceCup with: { Die withSides: 1 }.
+
+    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
+
+    self assert: game currentShip equals: ship1.
+    game advanceTurn.
+    self assert: game currentShip equals: ship2.
 ]
 
 { #category : 'tests' }
