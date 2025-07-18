@@ -23,6 +23,7 @@ ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
 		        board: board
 		        dice: dice
 		        laps: 1.
+		
 	card activateFor: ship1 inGame: game.
 	self assert: (ship1 activeCards includes: card)
 ]
@@ -34,4 +35,30 @@ ReversePolarityCardTest >> testCreateCardWithTargetCell [
 	cell := 5.
 	card := ReversePolarityCard forCell: cell.
 	self assert: card targetCell equals: cell
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
+
+	| card cell ship otherShip board game |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	ship := Spaceship withName: 'John Doe'.
+	otherShip := Spaceship withName: 'Jane Doe'.
+	board := Board of: 10 andWormholeAt: {  }.
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	board moveShip: otherShip to: 8.
+	card activateFor: ship inGame: game.
+	board moveShip: ship to: cell.
+	board applyEffectTo: ship.
+
+	self assert: otherShip position equals: 8 - 4.
+	self assert: ship position equals: cell
 ]
