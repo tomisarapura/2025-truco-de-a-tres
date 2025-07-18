@@ -6,6 +6,22 @@ Class {
 }
 
 { #category : 'tests' }
+BlackHoleEffectTest >> testApplyEffectDecreasesTurbine [
+
+	| ship effect |
+	ship := Spaceship withName: 'John Doe'.
+	ship moveTo: 6.
+	effect := BlackHoleEffect new.
+
+	self assert: ship remainingTurbines equals: 3.
+
+	effect applyTo: ship.
+
+	self assert: ship position equals: 2.
+	self assert: ship remainingTurbines equals: 2
+]
+
+{ #category : 'tests' }
 BlackHoleEffectTest >> testApplyToDoesNotGoBelowZero [
 
     | ship effect |
