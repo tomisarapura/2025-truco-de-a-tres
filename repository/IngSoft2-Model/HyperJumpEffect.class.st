@@ -51,7 +51,6 @@ HyperJumpEffect >> applyTo: aSpaceship inBoard: aBoard [
     self applyEffectTo: aSpaceship inBoard: aBoard.
 ]
 
-
 { #category : 'private' }
 HyperJumpEffect >> convertAndSortValues: aCollection [
     | convertedValues |

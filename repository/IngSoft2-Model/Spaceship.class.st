@@ -9,7 +9,8 @@ Class {
 		'lap',
 		'cards',
 		'activeCards',
-		'state'
+		'state',
+		'turbine'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -72,10 +73,11 @@ Spaceship >> initializeWith: aName [
 	position := 0.
 	fuel := 0.
 	maxFuel := 0.
-        lap := 0.
-        cards := OrderedCollection new.
-        activeCards := OrderedCollection new.
-        state := NormalShipState new
+	lap := 0.
+	cards := OrderedCollection new.
+	activeCards := OrderedCollection new.
+	state := NormalShipState new.
+	turbine := 3
 ]
 
 { #category : 'state' }
@@ -126,16 +128,6 @@ Spaceship >> penalizeFor: aNumber [
 Spaceship >> penaltyTurnsRemaining [
 
 	^ state turnsRemaining
-]
-
-{ #category : 'state' }
-Spaceship >> penalizeFor: aNumber [
-    state := state penalizeFor: aNumber.
-]
-
-{ #category : 'state' }
-Spaceship >> penaltyTurnsRemaining [
-    ^ state turnsRemaining.
 ]
 
 { #category : 'cards' }
