@@ -55,15 +55,22 @@ PermanentCardTest >> testPlayOnRaisesErrorIfGameFinished [
 
 { #category : 'tests' }
 PermanentCardTest >> testPlayOnRaisesErrorIfNotPlayersTurn [
-    | ship1 ship2 board dice game card |
-    ship1 := Spaceship withName: 'Alpha'.
-    ship2 := Spaceship withName: 'Beta'.
-    board := Board of: 5 andWormholeAt: #().
-    dice := DiceCup with: { Die withSides: 1 }.
-    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
-    card := OverloadCard forShip: ship2.
-    self
-        should: [ card playOn: ship2 inGame: game ]
-        raise: Error
-        withMessageText: 'Not your turn'.
+
+	| ship1 ship2 board dice game card |
+	ship1 := Spaceship withName: 'Alpha'.
+	ship2 := Spaceship withName: 'Beta'.
+	board := Board of: 5 andWormholeAt: #(  ).
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	card := OverloadCard forShip: ship2.
+	self
+		should: [ card playOn: ship2 inGame: game ]
+		raise: Error
+		withMessageText: 'Not your turn'
 ]

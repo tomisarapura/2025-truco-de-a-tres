@@ -125,7 +125,7 @@ Board >> applyEffectTo: aSpaceship [
 	cellPosition := self positionOf: aSpaceship.
 	effect := self effectAt: cellPosition.
 	effect ifNotNil: [
-		(effect class = AtomicBombEffect or: [ effect class = BlackHoleEffect ])
+		(effect class = AtomicBombEffect or: [ effect class = BlackHoleEffect or: [ effect class = MoonWalkEffect ]])
 			ifTrue: [
 				"Aplicar inversión normalmente para estos dos efectos"
 				shouldInvert := self isCellInverted: cellPosition.
@@ -144,9 +144,10 @@ Board >> applyEffectTo: aSpaceship [
 
 { #category : 'method' }
 Board >> applyWormholeIfPresentAt: aPosition [
-    ^ (wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ])
-        ifNil: [ aPosition ]
-        ifNotNil: [ :w | w exit ]
+
+	^ (wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ])
+		  ifNil: [ aPosition ]
+		  ifNotNil: [ :w | w exit ]
 ]
 
 { #category : 'testing' }

@@ -111,7 +111,6 @@ ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 		        dice: (DiceCup with: { (Die withSides: 1) })
 		        laps: 1.
 
-	board moveShip: ship to: 5.
 	board moveShip: otherShip to: 8.
 	card activateFor: ship inGame: game.
 	board moveShip: ship to: cell.
