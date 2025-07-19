@@ -231,32 +231,28 @@ Board >> isPositionReachedAt: aPosition [
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip backward: steps [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
+    self reviewRegisteredShips.
     positionManager moveShip: aShip backward: steps.
 ]
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip forward: steps [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
-    positionManager moveShip: aShip forward: steps.
+
+	self reviewRegisteredShips.
+	positionManager moveShip: aShip forward: steps
 ]
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip to: aPosition [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
-    positionManager moveShip: aShip to: aPosition.
+
+	self reviewRegisteredShips.
+	positionManager moveShip: aShip to: aPosition
 ]
 
 { #category : 'spaceships' }
 Board >> positionOf: aShip [
 
-	positionManager ifNil: [ self error: 'Board has no registered ships' ].
+	self reviewRegisteredShips.
 	^ positionManager positionOf: aShip
 ]
 
@@ -276,7 +272,6 @@ Board >> randomEffect [
 Board >> registerShips: someShips [
 
 	shipsOnBoard := someShips copy.
-
 	positionManager := PositionManager forShips: someShips
 ]
 
@@ -285,6 +280,12 @@ Board >> reversePolarityCards [
 
 	^ self allActiveCards select: [ :card |
 		  card isKindOf: ReversePolarityCard ]
+]
+
+{ #category : 'spaceships' }
+Board >> reviewRegisteredShips [
+
+	positionManager ifNil: [ self error: 'Board has no registered ships' ]
 ]
 
 { #category : 'accessing' }
