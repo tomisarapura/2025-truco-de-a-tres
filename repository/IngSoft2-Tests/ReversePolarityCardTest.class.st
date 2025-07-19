@@ -94,6 +94,38 @@ ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testInvertedHyperJumpAffectsOthers [
+	| card cell ship otherShip board game hyperJump |
+	cell := 5.
+	hyperJump := HyperJumpEffect withValues: #(10). "10 parsecs"
+	
+	card := ReversePolarityCard forCell: cell.
+	ship := Spaceship withName: 'John Doe'.
+	otherShip := Spaceship withName: 'Jane Doe'.
+	board := Board
+		of: 100
+		length: 100
+		andWormholeAt: {}.
+	
+	board assignEffect: hyperJump toCell: cell.
+	
+	game := Game
+		startWithShips: { ship. otherShip }
+		board: board
+		dice: (DiceCup with: { Die withSides: 1 })
+		laps: 1.
+
+	board moveShip: otherShip to: 8.  
+	card activateFor: ship inGame: game.  
+	board moveShip: ship to: cell.     
+
+	board applyEffectTo: ship.
+
+	self assert: otherShip position equals: 8 + 10.  
+	self assert: ship position equals: cell.      
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 
 	| card cell ship otherShip board game |

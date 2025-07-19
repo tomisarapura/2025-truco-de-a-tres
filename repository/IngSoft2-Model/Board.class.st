@@ -125,19 +125,10 @@ Board >> applyEffectTo: aSpaceship [
 	cellPosition := self positionOf: aSpaceship.
 	effect := self effectAt: cellPosition.
 	effect ifNotNil: [
-		(effect class = AtomicBombEffect or: [ effect class = BlackHoleEffect or: [ effect class = MoonWalkEffect ]])
-			ifTrue: [
-				"Aplicar inversión normalmente para estos dos efectos"
-				shouldInvert := self isCellInverted: cellPosition.
-				shouldInvert
-					ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
-					ifFalse: [ effect applyTo: aSpaceship inBoard: self ]
-			]
-			ifFalse: [
-				"Para otros efectos, ejecutar sin invertir"
-				effect applyTo: aSpaceship inBoard: self
-			]
-	].
+		shouldInvert := self isCellInverted: cellPosition.
+		shouldInvert
+			ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
+			ifFalse: [ effect applyTo: aSpaceship inBoard: self ] ].
 
 	^ self
 ]
