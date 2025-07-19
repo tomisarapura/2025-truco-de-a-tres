@@ -7,7 +7,9 @@ Class {
 
 { #category : 'operations' }
 MoonWalkEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
-        ^ self.
+
+	aBoard shipsOnBoard do: [ :ship |
+		ship = aSpaceship ifFalse: [ aBoard moveShip: ship backward: 2 ] ]
 ]
 
 { #category : 'operations' }
