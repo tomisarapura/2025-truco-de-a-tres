@@ -136,9 +136,16 @@ Board >> applyEffectTo: aSpaceship [
 { #category : 'method' }
 Board >> applyWormholeIfPresentAt: aPosition [
 
-	^ (wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ])
-		  ifNil: [ aPosition ]
-		  ifNotNil: [ :w | w exit ]
+	| wormholeWithEntry |
+	
+	wormholeWithEntry := wormholes
+		                     detect: [ :wormhole |
+		                     wormhole hasEntryAt: aPosition ]
+		                     ifNone: [ nil ].
+
+	wormholeWithEntry isNil
+		ifTrue: [ ^ aPosition ]
+		ifFalse: [ ^ wormholeWithEntry exit ]
 ]
 
 { #category : 'testing' }
