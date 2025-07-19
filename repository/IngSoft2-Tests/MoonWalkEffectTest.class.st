@@ -8,15 +8,26 @@ Class {
 { #category : 'tests' }
 MoonWalkEffectTest >> testApplyToDoesNothing [
 
-    | effect ship originalPosition |
+	| effect ship1 ship2 allShips originalPosition board game |
+	effect := MoonWalkEffect new.
+	ship1 := Spaceship withName: 'Ship1'.
+	ship2 := Spaceship withName: 'Ship2'.
+	allShips := {
+		            ship1.
+		            ship2 }.
 
-    effect := MoonWalkEffect new.
-    ship := Spaceship withName: 'TestShip'.
+	board := Board of: 10 andWormholeAt: {  }.
 
-    originalPosition := ship position.
-    effect applyTo: ship.
-    
-    self assert: ship position equals: originalPosition.
+	game := Game
+		        startWithShips: allShips
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	originalPosition := ship1 position.
+	effect applyEffectTo: ship1 inBoard: board.
+
+	self assert: ship1 position equals: originalPosition
 ]
 
 { #category : 'tests' }
