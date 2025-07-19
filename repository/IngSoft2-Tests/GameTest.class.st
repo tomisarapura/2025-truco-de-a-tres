@@ -133,7 +133,7 @@ GameTest >> testEnsureGameIsNotOverRaisesErrorIfGameFinished [
 	self should: [ game ensureGameIsNotOver ] raise: Error.
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testFindPenaltyForReturnsExistingPenalty [
 
     | ship1 ship2 board dice game |
@@ -231,7 +231,7 @@ self assert: pos1 position equals: finalPositionShip1.
 self assert: pos2 position equals: finalPositionShip2.
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testHandlePenaltyOrPassIfNeededReturnsFalseWhenNoPenaltyAndNoPass [
 	| ship dice board game result |
 
@@ -245,7 +245,7 @@ GameTest >> testHandlePenaltyOrPassIfNeededReturnsFalseWhenNoPenaltyAndNoPass [
 	self assert: result equals: false.
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testHandlePenaltyOrPassIfNeededReturnsTrueWhenPenalized [
 	| ship dice board game result |
 
@@ -261,7 +261,7 @@ GameTest >> testHandlePenaltyOrPassIfNeededReturnsTrueWhenPenalized [
 	self assert: result equals: true.
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testHandlePenaltyOrPassIfNeededReturnsTrueWhenShipWantsToPassTurn [
 	| ship dice board game result |
 
@@ -330,7 +330,7 @@ game whenFinishedDo: [ :w | self assert: true ]
      whenInProgressDo: [ self fail: 'Expected the game to be over' ].
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testIsPenalizedDetectsPenalizedShip [
 
     | ship1 ship2 game dice |
@@ -410,7 +410,7 @@ GameTest >> testPassTurnRestoresFuelToMax [
     self assert: game currentShip equals: ship2.
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testPenalizeAddsPenalizedShip [
 
     | ship1 ship2 board dice game |
@@ -444,7 +444,7 @@ GameTest >> testPenaltyShipReturnsPenalizedShipsCollection [
     self assert: (game penaltyShip first == ship1).
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testPenaltyTurnsRemainingFor [
 
     | ship1 ship2 board dice game |
@@ -606,15 +606,17 @@ game whenFinishedDo: [ :w | self assert: true ]
 { #category : 'tests' }
 GameTest >> testRankingReturnsShipsOrderedByLapsAndPosition [
 
-        | spaceShip1 spaceShip2 spaceShip3 spaceShipsGame  dice1  dicesGame boardGame game ranking |
-  
-  	dice1 := Die withSides: 1.
+	| spaceShip1 spaceShip2 spaceShip3 spaceShipsGame dice1 dicesGame boardGame game ranking |
+	dice1 := Die withSides: 1.
 	dicesGame := DiceCup with: (OrderedCollection with: dice1).
-	
+
 	spaceShip1 := Spaceship withName: 'Ship Num1'.
 	spaceShip2 := Spaceship withName: 'Ship Num2'.
-  	spaceShip3 := Spaceship withName: 'Ship Num3'.
-	spaceShipsGame := OrderedCollection with: spaceShip1 with: spaceShip2 with: spaceShip3.
+	spaceShip3 := Spaceship withName: 'Ship Num3'.
+	spaceShipsGame := OrderedCollection
+		                  with: spaceShip1
+		                  with: spaceShip2
+		                  with: spaceShip3.
 
 	boardGame := Board of: 3 andWormholeAt: #(  ).
 
@@ -626,13 +628,13 @@ GameTest >> testRankingReturnsShipsOrderedByLapsAndPosition [
 
 	game playUntilFinish.
 
-        ranking := game ranking.
+	ranking := game ranking.
 
-        self assert: ranking size equals: 3.
+	self assert: ranking size equals: 3.
 
-        self assert: ranking first ship equals: spaceShip1.
-        self assert: ranking second ship equals: spaceShip2.
-        self assert: ranking third ship equals: spaceShip3
+	self assert: ranking first ship equals: spaceShip1.
+	self assert: ranking second ship equals: spaceShip2.
+	self assert: ranking third ship equals: spaceShip3
 ]
 
 { #category : 'redo' }
@@ -761,7 +763,7 @@ GameTest >> testReducePenaltyDecreasesTurnCount [
     self deny: (game isPenalized: ship1).
 ]
 
-{ #category : 'tests' }
+{ #category : 'penalty' }
 GameTest >> testReducePenaltyRemovesPenaltyEventually [
 
     | ship game dice penalty |
@@ -1493,8 +1495,7 @@ GameTest >> testWhenShipTriesToPlayOutOfTurnThenError [
 { #category : 'spaceships' }
 GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
 
-
-        | spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame totalLaps game |
+	| spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame totalLaps game |
 	dice1 := Die withSides: 1.
 	dicesGame := DiceCup with: (OrderedCollection with: dice1).
 
@@ -1504,18 +1505,18 @@ GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
 
 	boardGame := Board of: 3 andWormholeAt: #(  ).
 
-        totalLaps := 3.
+	totalLaps := 3.
 
 
-        game := Game
-                        startWithShips: spaceShipsGame
-                        board: boardGame
-                        dice: dicesGame
-                        laps: totalLaps.
+	game := Game
+		        startWithShips: spaceShipsGame
+		        board: boardGame
+		        dice: dicesGame
+		        laps: totalLaps.
 
-        game playUntilFinish.
-        self assert: (game lapTrackerFor: spaceShip1) lapCount equals: 3.
-        self assert: (game hasWonByLaps: spaceShip1)
+	game playUntilFinish.
+	self assert: (game lapTrackerFor: spaceShip1) lapCount equals: 3.
+	self assert: (game hasWonByLaps: spaceShip1)
 ]
 
 { #category : 'spaceships' }
@@ -1563,7 +1564,7 @@ GameTest >> testWhenShipsStartWithTwoCards [
     self assert: ship2 cards size equals: 2.
 ]
 
-{ #category : 'tests' }
+{ #category : 'winner' }
 GameTest >> testWhenWinnerSpaceShipIsCorrectWhenGameEnds [
 
 	| spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame game |
@@ -1590,7 +1591,7 @@ GameTest >> testWhenWinnerSpaceShipIsCorrectWhenGameEnds [
             whenInProgressDo: [ self fail: 'Expected game to be finished' ]
 ]
 
-{ #category : 'tests' }
+{ #category : 'winner' }
 GameTest >> testWinnerReturnsNilWhenGameInProgress [
     | ship1 ship2 board dice game |
     ship1 := Spaceship withName: 'Alpha'.
@@ -1601,7 +1602,7 @@ GameTest >> testWinnerReturnsNilWhenGameInProgress [
     self assert: game winner isNil.
 ]
 
-{ #category : 'tests' }
+{ #category : 'winner' }
 GameTest >> testWinnerReturnsShipWhenGameFinishes [
     | ship1 ship2 board dice game |
     ship1 := Spaceship withName: 'Alpha'.

@@ -348,18 +348,27 @@ Game >> rewardForMaxRollTo: aShip [
 { #category : 'process actions' }
 Game >> rollAndMoveCurrentShip [
 
-	| steps newPosition modified |
+	| steps newPosition modified cellEffect |
 	lastPreviousPosition := self currentShip position.
 	steps := dice roll.
 	steps = dice maxRoll ifTrue: [
 		self rewardForMaxRollTo: self currentShip ].
 	modified := self modifyRoll: steps forShip: self currentShip.
-	modified >= 0
-		ifTrue: [
-			newPosition := board
+
+	newPosition := modified >= 0
+		               ifTrue: [
+			               board
 				               determineNewPositionFrom: lastPreviousPosition
-				               after: modified.
-			board moveShip: self currentShip to: newPosition ]
+				               after: modified ]
+		               ifFalse: [
+		               lastPreviousPosition - modified abs max: 0 ].
+
+	cellEffect := board effectAt: newPosition.
+	(cellEffect isKindOf: HyperGravityEffect) ifTrue: [
+		modified < cellEffect requiredRoll ifTrue: [
+			newPosition := lastPreviousPosition ] ].
+	modified >= 0
+		ifTrue: [ board moveShip: self currentShip to: newPosition ]
 		ifFalse: [ board moveShip: self currentShip backward: modified abs ].
 	lastSteps := modified
 ]
