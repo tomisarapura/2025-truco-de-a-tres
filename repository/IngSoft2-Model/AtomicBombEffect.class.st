@@ -11,6 +11,11 @@ AtomicBombEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
 ]
 
 { #category : 'operations' }
+AtomicBombEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
+    ^ self
+]
+
+{ #category : 'operations' }
 AtomicBombEffect >> applyTo: aSpaceship inContextOf: allSpaceships inBoard: aBoard [
     | board |
     board := aBoard ifNil: [ NullBoard new ] ifNotNil: [ aBoard ].

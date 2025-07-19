@@ -46,6 +46,7 @@ ReversePolarityCardTest >> testInvertedAtomicBombAffectsNobody [
 	ship := Spaceship withName: 'John Doe'.
 	otherShip := Spaceship withName: 'Jane Doe'.
 	board := Board of: 10 andWormholeAt: {  }.
+	board assignEffect: AtomicBombEffect new toCell: 7.
 	game := Game
 		        startWithShips: {
 				        ship.
@@ -73,6 +74,7 @@ ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
 	ship := Spaceship withName: 'John Doe'.
 	otherShip := Spaceship withName: 'Jane Doe'.
 	board := Board of: 10 andWormholeAt: {  }.
+	board assignEffect: BlackHoleEffect new toCell: 5.
 	game := Game
 		        startWithShips: {
 				        ship.

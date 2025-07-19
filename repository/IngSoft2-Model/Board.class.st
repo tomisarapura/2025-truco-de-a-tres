@@ -125,11 +125,20 @@ Board >> applyEffectTo: aSpaceship [
 	cellPosition := self positionOf: aSpaceship.
 	effect := self effectAt: cellPosition.
 	effect ifNotNil: [
-		shouldInvert := self isCellInverted: cellPosition.
+		(effect class = AtomicBombEffect or: [ effect class = BlackHoleEffect ])
+			ifTrue: [
+				"Aplicar inversión normalmente para estos dos efectos"
+				shouldInvert := self isCellInverted: cellPosition.
+				shouldInvert
+					ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
+					ifFalse: [ effect applyTo: aSpaceship inBoard: self ]
+			]
+			ifFalse: [
+				"Para otros efectos, ejecutar sin invertir"
+				effect applyTo: aSpaceship inBoard: self
+			]
+	].
 
-		shouldInvert
-			ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
-			ifFalse: [ effect applyTo: aSpaceship inBoard: self ] ].
 	^ self
 ]
 
@@ -138,6 +147,12 @@ Board >> applyWormholeIfPresentAt: aPosition [
     ^ (wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ])
         ifNil: [ aPosition ]
         ifNotNil: [ :w | w exit ]
+]
+
+{ #category : 'testing' }
+Board >> assignEffect: anEffect toCell: aCellPosition [
+
+	cells at: aCellPosition put: anEffect
 ]
 
 { #category : 'moves' }
@@ -165,7 +180,8 @@ Board >> cells [
 
 { #category : 'moves' }
 Board >> determineNewPositionFrom: aPosition after: steps [
-    ^ self applyWormholeIfPresentAt: (aPosition + steps).
+
+	^ self applyWormholeIfPresentAt: aPosition + steps
 ]
 
 { #category : 'deck' }
