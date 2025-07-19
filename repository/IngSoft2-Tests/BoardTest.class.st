@@ -433,30 +433,41 @@ BoardTest >> testLapIncrementsWhenPassingLastCell [
 { #category : 'effects' }
 BoardTest >> testMoonWalkEffectMovesOtherSpaceshipsBackwards [
 
-        | dice1 effect ship1 ship2 ship3 allShips board |
+	| dice1 effect ship1 ship2 ship3 allShips board game |
+	dice1 := Die withSides: 6.
 
-        dice1 := Die withSides: 6.
+	effect := MoonWalkEffect new.
 
-        effect := MoonWalkEffect new.
+	ship1 := Spaceship withName: 'Player1'.
+	ship2 := Spaceship withName: 'Player2'.
+	ship3 := Spaceship withName: 'Player3'.
 
-        ship1 := Spaceship withName: 'Player1'.
-        ship2 := Spaceship withName: 'Player2'.
-        ship3 := Spaceship withName: 'Player3'.
+	allShips := {
+		            ship1.
+		            ship2.
+		            ship3 }.
 
-        board := Board of: 5 andWormholeAt: {}.
+	board := Board of: 5 andWormholeAt: {  }.
+	game := Game
+		        startWithShips: allShips
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+	ship1 moveTo: 5.
+	ship2 moveTo: 7.
+	ship3 moveTo: 3.
 
-        ship1 moveTo: 5.
-        ship2 moveTo: 7.
-        ship3 moveTo: 3.
+	allShips := {
+		            ship1.
+		            ship2.
+		            ship3 }.
+	board registerShips: allShips.
 
-        allShips := { ship1. ship2. ship3 }.
-        board registerShips: allShips.
+	effect applyEffectTo: ship2 inBoard: board.
 
-        effect applyTo: ship2 inContextOf: allShips inBoard: board.
-
-        self assert: ship2 position equals: 7.
-        self assert: ship1 position equals: 3.
-        self assert: ship3 position equals: 1.
+	self assert: ship2 position equals: 7.
+	self assert: ship1 position equals: 3.
+	self assert: ship3 position equals: 1
 ]
 
 { #category : 'move' }
