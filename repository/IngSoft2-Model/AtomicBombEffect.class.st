@@ -7,7 +7,10 @@ Class {
 
 { #category : 'operations' }
 AtomicBombEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
-    ^ self
+    
+	aBoard shipsOnBoard do: [:ship |
+        aBoard moveShip: ship to: 0
+    ].
 ]
 
 { #category : 'operations' }

@@ -59,39 +59,41 @@ BoardTest >> testApplyWormholeIfPresentReturnsSameWhenAbsent [
 { #category : 'effects' }
 BoardTest >> testAtomicBombEffectResetsPositionsButKeepsLaps [
 
-        | effect ship1 ship2 ship3 allShips board |
+	| effect ship1 ship2 ship3 allShips board game |
+	effect := AtomicBombEffect new.
+	board := Board of: 5 andWormholeAt: {  }.
 
-        effect := AtomicBombEffect new.
-        board := Board of: 5 andWormholeAt: {}.
+	ship1 := Spaceship withName: 'Red'.
+	ship2 := Spaceship withName: 'Blue'.
+	ship3 := Spaceship withName: 'Green'.
 
-        ship1 := Spaceship withName: 'Red'.
-        ship2 := Spaceship withName: 'Blue'.
-        ship3 := Spaceship withName: 'Green'.
+	ship1 moveTo: 6.
+	ship2 moveTo: 3.
+	ship3 moveTo: 9.
 
-        ship1 moveTo: 6.
-        ship2 moveTo: 3.
-        ship3 moveTo: 9.
+	ship1 instVarNamed: 'lap' put: 1.
+	ship2 instVarNamed: 'lap' put: 2.
+	ship3 instVarNamed: 'lap' put: 3.
 
-        ship1 instVarNamed: 'lap' put: 1.
-        ship2 instVarNamed: 'lap' put: 2.
-        ship3 instVarNamed: 'lap' put: 3.
+	allShips := {
+		            ship1.
+		            ship2.
+		            ship3 }.
 
-        allShips := {
-                ship1.
-                ship2.
-                ship3.
-        }.
+	game := Game
+		        startWithShips: allShips
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 5.
 
-        board registerShips: allShips.
+	effect applyEffectTo: ship2 inBoard: board.
 
-        effect applyTo: ship2 inContextOf: allShips inBoard: board.
-
-        self assert: ship1 position equals: 0.
-        self assert: ship2 position equals: 0.
-        self assert: ship3 position equals: 0.
-        self assert: ship1 lap equals: 1.
-        self assert: ship2 lap equals: 2.
-        self assert: ship3 lap equals: 3.
+	self assert: ship1 position equals: 0.
+	self assert: ship2 position equals: 0.
+	self assert: ship3 position equals: 0.
+	self assert: ship1 lap equals: 1.
+	self assert: ship2 lap equals: 2.
+	self assert: ship3 lap equals: 3
 ]
 
 { #category : 'effects' }
