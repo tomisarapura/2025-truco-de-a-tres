@@ -33,19 +33,13 @@ PositionManager >> initializeForShips: someShips [
 ]
 
 { #category : 'updating' }
-PositionManager >> moveShip: aShip backward: steps [
+PositionManager >> moveShip: aShip by: steps [
 
 	| currentPos newPos |
+	
 	currentPos := self positionOf: aShip.
-	newPos := currentPos - steps max: 0.
-
+	newPos := currentPos + steps max: 0.
 	self moveShip: aShip to: newPos
-]
-
-{ #category : 'updating' }
-PositionManager >> moveShip: aShip forward: steps [
-
-	self moveShip: aShip to: (self positionOf: aShip) + steps
 ]
 
 { #category : 'updating' }

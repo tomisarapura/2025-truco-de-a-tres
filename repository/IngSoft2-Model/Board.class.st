@@ -231,15 +231,16 @@ Board >> isPositionReachedAt: aPosition [
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip backward: steps [
+
     self reviewRegisteredShips.
-    positionManager moveShip: aShip backward: steps.
+    positionManager moveShip: aShip by: steps negated.
 ]
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip forward: steps [
 
 	self reviewRegisteredShips.
-	positionManager moveShip: aShip forward: steps
+	positionManager moveShip: aShip by: steps
 ]
 
 { #category : 'spaceships' }
