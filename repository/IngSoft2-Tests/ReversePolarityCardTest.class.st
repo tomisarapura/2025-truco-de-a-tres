@@ -246,3 +246,31 @@ ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 	self assert: otherShip position equals: 8.
 	self assert: ship position equals: cell
 ]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testInvertedNoEffectAffectsNobody [
+
+	| card cell ship otherShip board game |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	ship := Spaceship withName: 'John Doe'.
+	otherShip := Spaceship withName: 'Jane Doe'.
+	board := Board of: 10 andWormholeAt: {  }.
+	board assignEffect: NoEffect new toCell: 5.
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	board moveShip: otherShip to: 8.
+	card activateFor: ship inGame: game.
+	board moveShip: ship to: cell.
+	board applyEffectTo: ship.
+
+	self assert: ship position equals: 5.
+	self assert: otherShip position equals: 8.
+	self assert: ship position equals: cell
+]
