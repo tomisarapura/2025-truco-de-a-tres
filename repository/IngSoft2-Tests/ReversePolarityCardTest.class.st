@@ -29,6 +29,26 @@ ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testCellNotInvertedInitially [
+
+	| ship1 ship2 board dice game |
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
+
+	dice := DiceCup with: { (Die withSides: 1) }.
+
+	board := Board of: 10 length: 10 andWormholeAt: #(  ).
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	0 to: 9 do: [ :cell | self assert: (board isCellInverted: cell) not ]
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testCreateCardWithTargetCell [
 
 	| card cell |
