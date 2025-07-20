@@ -7,28 +7,50 @@ Class {
 
 { #category : 'tests - instance' }
 NullBoardTest >> testMoveShipBackwardMovesShipProperly [
-    | board ship |
-    board := NullBoard new.
-    ship := Spaceship withName: 'Voyager'.
-    ship moveTo: 3.
-    board moveShip: ship backward: 2.
-    self assert: ship position equals: 1.
+
+	| board ship |
+	board := NullBoard new.
+	ship := Spaceship withName: 'Voyager'.
+	ship moveTo: 3.
+	board moveShip: ship backward: 2.
+	self assert: ship position equals: 1
+]
+
+{ #category : 'tests - instance' }
+NullBoardTest >> testMoveShipBackwardWithNegativeStepsDoesNotMoveBelowZero [
+
+	| board ship |
+	board := NullBoard new.
+	ship := Spaceship withName: 'John Doe'.
+	ship moveTo: 1.
+	board moveShip: ship backward: 2.
+	self assert: ship position equals: 0
 ]
 
 { #category : 'tests - instance' }
 NullBoardTest >> testMoveShipForwardMovesShipProperly [
-    | board ship |
-    board := NullBoard new.
-    ship := Spaceship withName: 'Enterprise'.
-    board moveShip: ship forward: 3.
-    self assert: ship position equals: 3.
+
+	| board ship |
+	board := NullBoard new.
+	ship := Spaceship withName: 'Enterprise'.
+	board moveShip: ship forward: 3.
+	self assert: ship position equals: 3
 ]
 
 { #category : 'tests - instance' }
 NullBoardTest >> testMoveShipToSetsExactPosition [
-    | board ship |
-    board := NullBoard new.
-    ship := Spaceship withName: 'Discovery'.
-    board moveShip: ship to: 5.
-    self assert: ship position equals: 5.
+
+	| board ship |
+	board := NullBoard new.
+	ship := Spaceship withName: 'Discovery'.
+	board moveShip: ship to: 5.
+	self assert: ship position equals: 5
+]
+
+{ #category : 'tests - instance' }
+NullBoardTest >> testShipsOnBoardReturnsEmptyCollection [
+
+	| board |
+	board := NullBoard new.
+	self assert: board shipsOnBoard isEmpty
 ]
