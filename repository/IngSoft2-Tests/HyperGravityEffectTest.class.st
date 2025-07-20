@@ -29,26 +29,17 @@ HyperGravityEffectTest >> testAllowsEntryWithRollTrueWhenEnough [
 ]
 
 { #category : 'tests' }
-HyperGravityEffectTest >> testApplyToMoveShipBackwardsOneStep [
+HyperGravityEffectTest >> testApplyToMovesShipBackwardsOneStep [
 
-	| ship1 ship2 board dice game effect |
-	ship1 := Spaceship withName: 'John Doe'.
-	ship2 := Spaceship withName: 'Jane Doe'.
-	board := Board of: 5 andWormholeAt: {  }.
-	dice := DiceCup with: { (Die withSides: 1) }.
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1.
-	board moveShip: ship1 to: 5.
+    | ship effect |
 
-	effect := HyperGravityEffect new.
-	effect applyTo: ship1 inBoard: board.
+    ship := Spaceship withName: 'Heavy'.
+    ship moveTo: 5.
 
-	self assert: ship1 position equals: 4
+    effect := HyperGravityEffect new.
+    effect applyTo: ship.
+
+    self assert: ship position equals: 4.
 ]
 
 { #category : 'tests' }

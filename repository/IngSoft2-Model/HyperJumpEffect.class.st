@@ -42,15 +42,6 @@ HyperJumpEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
 ]
 
 { #category : 'operations' }
-HyperJumpEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
-
-	aBoard shipsOnBoard do: [ :ship |
-		ship == aSpaceship ifFalse: [
-			self applyEffectTo: ship inBoard: aBoard ] ].
-	^ self
-]
-
-{ #category : 'operations' }
 HyperJumpEffect >> applyTo: aSpaceship [
     self error: 'Use applyTo:inBoard: instead.'
 ]

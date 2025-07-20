@@ -38,23 +38,12 @@ BoardTest >> testApplyEffectToDoesNothingIfNoEffect [
 { #category : 'tests - instance' }
 BoardTest >> testApplyWormholeIfPresentReturnsExit [
 
-	| ship1 ship2 wormhole board dice game |
-	ship1 := Spaceship withName: 'John Doe'.
-	ship2 := Spaceship withName: 'Jane Doe'.
+    | board wormhole |
 
-	wormhole := Wormhole from: 2 to: 7.
-	board := Board of: 10 andWormholeAt: { wormhole }.
+    wormhole := Wormhole from: 2 to: 7.
+    board := Board of: 10 andWormholeAt: { wormhole }.
 
-	dice := DiceCup with: { (Die withSides: 1) }.
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1.
-
-	self assert: (board applyWormholeIfPresentAt: 2) equals: 7
+    self assert: (board applyWormholeIfPresentAt: 2) equals: 7.
 ]
 
 { #category : 'tests - instance' }
@@ -70,41 +59,39 @@ BoardTest >> testApplyWormholeIfPresentReturnsSameWhenAbsent [
 { #category : 'effects' }
 BoardTest >> testAtomicBombEffectResetsPositionsButKeepsLaps [
 
-	| effect ship1 ship2 ship3 allShips board game |
-	effect := AtomicBombEffect new.
-	board := Board of: 5 andWormholeAt: {  }.
+        | effect ship1 ship2 ship3 allShips board |
 
-	ship1 := Spaceship withName: 'Red'.
-	ship2 := Spaceship withName: 'Blue'.
-	ship3 := Spaceship withName: 'Green'.
+        effect := AtomicBombEffect new.
+        board := Board of: 5 andWormholeAt: {}.
 
-	ship1 moveTo: 6.
-	ship2 moveTo: 3.
-	ship3 moveTo: 9.
+        ship1 := Spaceship withName: 'Red'.
+        ship2 := Spaceship withName: 'Blue'.
+        ship3 := Spaceship withName: 'Green'.
 
-	ship1 instVarNamed: 'lap' put: 1.
-	ship2 instVarNamed: 'lap' put: 2.
-	ship3 instVarNamed: 'lap' put: 3.
+        ship1 moveTo: 6.
+        ship2 moveTo: 3.
+        ship3 moveTo: 9.
 
-	allShips := {
-		            ship1.
-		            ship2.
-		            ship3 }.
+        ship1 instVarNamed: 'lap' put: 1.
+        ship2 instVarNamed: 'lap' put: 2.
+        ship3 instVarNamed: 'lap' put: 3.
 
-	game := Game
-		        startWithShips: allShips
-		        board: board
-		        dice: (DiceCup with: { (Die withSides: 1) })
-		        laps: 5.
+        allShips := {
+                ship1.
+                ship2.
+                ship3.
+        }.
 
-	effect applyEffectTo: ship2 inBoard: board.
+        board registerShips: allShips.
 
-	self assert: ship1 position equals: 0.
-	self assert: ship2 position equals: 0.
-	self assert: ship3 position equals: 0.
-	self assert: ship1 lap equals: 1.
-	self assert: ship2 lap equals: 2.
-	self assert: ship3 lap equals: 3
+        effect applyTo: ship2 inContextOf: allShips inBoard: board.
+
+        self assert: ship1 position equals: 0.
+        self assert: ship2 position equals: 0.
+        self assert: ship3 position equals: 0.
+        self assert: ship1 lap equals: 1.
+        self assert: ship2 lap equals: 2.
+        self assert: ship3 lap equals: 3.
 ]
 
 { #category : 'effects' }
@@ -446,41 +433,30 @@ BoardTest >> testLapIncrementsWhenPassingLastCell [
 { #category : 'effects' }
 BoardTest >> testMoonWalkEffectMovesOtherSpaceshipsBackwards [
 
-	| dice1 effect ship1 ship2 ship3 allShips board game |
-	dice1 := Die withSides: 6.
+        | dice1 effect ship1 ship2 ship3 allShips board |
 
-	effect := MoonWalkEffect new.
+        dice1 := Die withSides: 6.
 
-	ship1 := Spaceship withName: 'Player1'.
-	ship2 := Spaceship withName: 'Player2'.
-	ship3 := Spaceship withName: 'Player3'.
+        effect := MoonWalkEffect new.
 
-	allShips := {
-		            ship1.
-		            ship2.
-		            ship3 }.
+        ship1 := Spaceship withName: 'Player1'.
+        ship2 := Spaceship withName: 'Player2'.
+        ship3 := Spaceship withName: 'Player3'.
 
-	board := Board of: 5 andWormholeAt: {  }.
-	game := Game
-		        startWithShips: allShips
-		        board: board
-		        dice: (DiceCup with: { (Die withSides: 1) })
-		        laps: 1.
-	ship1 moveTo: 5.
-	ship2 moveTo: 7.
-	ship3 moveTo: 3.
+        board := Board of: 5 andWormholeAt: {}.
 
-	allShips := {
-		            ship1.
-		            ship2.
-		            ship3 }.
-	board registerShips: allShips.
+        ship1 moveTo: 5.
+        ship2 moveTo: 7.
+        ship3 moveTo: 3.
 
-	effect applyEffectTo: ship2 inBoard: board.
+        allShips := { ship1. ship2. ship3 }.
+        board registerShips: allShips.
 
-	self assert: ship2 position equals: 7.
-	self assert: ship1 position equals: 3.
-	self assert: ship3 position equals: 1
+        effect applyTo: ship2 inContextOf: allShips inBoard: board.
+
+        self assert: ship2 position equals: 7.
+        self assert: ship1 position equals: 3.
+        self assert: ship3 position equals: 1.
 ]
 
 { #category : 'move' }
@@ -596,24 +572,13 @@ BoardTest >> testStepsFromLightYearsConvertsCorrectly [
 
 { #category : 'tests - instance' }
 BoardTest >> testWormholeTransportsCorrectly [
+    | board |
+    board := Board of: 20 andWormholeAt: (OrderedCollection withAll: {
+        Wormhole from: 2 to: 10.
+        Wormhole from: 10 to: 2.
+    }).
 
-	| ship1 ship2 board dice game |
-	ship1 := Spaceship withName: 'John Doe'.
-	ship2 := Spaceship withName: 'Jane Doe'.
+    self assert: (board applyWormholeIfPresentAt: 2) equals: 10.
+    self assert: (board applyWormholeIfPresentAt: 10) equals: 2.
 
-	board := Board of: 20 andWormholeAt: (OrderedCollection withAll: {
-				          (Wormhole from: 2 to: 10).
-				          (Wormhole from: 10 to: 2) }).
-
-	dice := DiceCup with: { (Die withSides: 1) }.
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1.
-
-	self assert: (board applyWormholeIfPresentAt: 2) equals: 10.
-	self assert: (board applyWormholeIfPresentAt: 10) equals: 2
 ]

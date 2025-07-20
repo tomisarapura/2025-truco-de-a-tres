@@ -84,12 +84,6 @@ Spaceship >> hasReachedGoalOn: aBoard [
 ]
 
 { #category : 'fuel' }
-Spaceship >> increaseFuelBy: someFuel [
-
-	fuel := fuel + someFuel
-]
-
-{ #category : 'fuel' }
 Spaceship >> increaseMaxFuelBy: anAmount [
     maxFuel := maxFuel + anAmount.
 ]
@@ -121,22 +115,22 @@ Spaceship >> lap [
 	^ lap
 ]
 
-{ #category : 'move' }
+{ #category : 'methods' }
 Spaceship >> moveBack: steps [
 
 	position := position - steps max: 0
 ]
 
-{ #category : 'move' }
+{ #category : 'methods' }
 Spaceship >> moveForward: steps [
 
-	position := position + steps max: 0
+	position := position + steps
 ]
 
-{ #category : 'move' }
+{ #category : 'methods' }
 Spaceship >> moveTo: aPosition [
 
-    position := aPosition max: 0.
+    position := aPosition.
 
 ]
 
