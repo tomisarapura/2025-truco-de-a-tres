@@ -47,8 +47,13 @@ PositionManager >> moveShip: aShip by: steps [
 { #category : 'updating' }
 PositionManager >> moveShip: aShip to: aPosition [
 
-	positions at: aShip put: aPosition.
-	aShip moveTo: aPosition
+	aPosition < 0
+		ifTrue: [
+			positions at: aShip put: 0.
+			aShip moveTo: 0 ]
+		ifFalse: [
+			positions at: aShip put: aPosition.
+			aShip moveTo: aPosition ]
 ]
 
 { #category : 'accessing' }

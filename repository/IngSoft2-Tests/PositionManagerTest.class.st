@@ -32,6 +32,28 @@ PositionManagerTest >> testForShipsValidatesInput [
 ]
 
 { #category : 'tests - instance' }
+PositionManagerTest >> testInitializationWithMultipleShips [
+
+	| ship1 ship2 ship3 manager |
+	ship1 := Spaceship withName: 'One'.
+	ship2 := Spaceship withName: 'Two'.
+	ship3 := Spaceship withName: 'Three'.
+
+	ship1 moveTo: 1.
+	ship2 moveTo: 2.
+	ship3 moveTo: 3.
+
+	manager := PositionManager forShips: {
+			           ship1.
+			           ship2.
+			           ship3 }.
+
+	self assert: (manager positionOf: ship1) equals: 1.
+	self assert: (manager positionOf: ship2) equals: 2.
+	self assert: (manager positionOf: ship3) equals: 3
+]
+
+{ #category : 'tests - instance' }
 PositionManagerTest >> testInitializeForShipsReturnsSelf [
 
 	| ship1 ship2 manager result |
@@ -79,6 +101,18 @@ PositionManagerTest >> testMoveShipToUpdatesPosition [
 	manager moveShip: ship to: 4.
 	self assert: ship position equals: 4.
 	self assert: (manager positionOf: ship) equals: 4
+]
+
+{ #category : 'tests - instance' }
+PositionManagerTest >> testMoveToNegativePositionAdjustsToZero [
+
+	| ship manager |
+	ship := Spaceship withName: 'Negative'.
+	manager := PositionManager forShips: { ship }.
+
+	manager moveShip: ship to: -5.
+	self assert: ship position equals: 0.
+	self assert: (manager positionOf: ship) equals: 0
 ]
 
 { #category : 'tests - instance' }
