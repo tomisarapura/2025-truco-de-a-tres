@@ -29,12 +29,20 @@ ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
 ]
 
 { #category : 'tests' }
-ReversePolarityCardTest >> testCellNotInvertedInitially [
+ReversePolarityCardTest >> testCreateCardWithTargetCell [
 
-	| ship1 ship2 board dice game |
+	| card cell |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	self assert: card targetCell equals: cell
+]
+
+{ #category : 'cumulative' }
+ReversePolarityCardTest >> testEffectApplicationWithPolarity [
+
+	| ship1 ship2 card effect originalPosition board dice game |
 	ship1 := Spaceship withName: 'John Doe'.
 	ship2 := Spaceship withName: 'Jane Doe'.
-
 	dice := DiceCup with: { (Die withSides: 1) }.
 
 	board := Board of: 10 length: 10 andWormholeAt: #(  ).
@@ -45,16 +53,20 @@ ReversePolarityCardTest >> testCellNotInvertedInitially [
 		        board: board
 		        dice: dice
 		        laps: 1.
-	0 to: 9 do: [ :cell | self assert: (board isCellInverted: cell) not ]
-]
+	effect := HyperGravityEffect new.
+	board assignEffect: effect toCell: 5.
 
-{ #category : 'tests' }
-ReversePolarityCardTest >> testCreateCardWithTargetCell [
 
-	| card cell |
-	cell := 5.
-	card := ReversePolarityCard forCell: cell.
-	self assert: card targetCell equals: cell
+	board moveShip: ship1 to: 5.
+	originalPosition := ship1 position.
+	board applyEffectTo: ship1.
+	self assert: ship1 position equals: originalPosition - 1.
+
+	card := ReversePolarityCard forCell: 5.
+	card activateFor: ship1 inGame: game.
+	board moveShip: ship1 to: 5.
+	board applyEffectTo: ship1.
+	self assert: ship1 position equals: 5
 ]
 
 { #category : 'tests' }
@@ -325,4 +337,31 @@ ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
 
 	self assert: ship1 position equals: 5.
 	self assert: ship2 position equals: 9
+]
+
+{ #category : 'cumulative' }
+ReversePolarityCardTest >> testReversePolarityAccumulation [
+
+	| card1 card2 card3 board ship1 ship2 game |
+	board := Board of: 10 length: 10 andWormholeAt: #(  ).
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Dow'.
+	game := Game
+		        startWithShips: { ship1. ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 6) })
+		        laps: 3.
+
+	"Primera carta: debe invertir la celda"
+	card1 := ReversePolarityCard forCell: 5.
+	card1 activateFor: ship1 inGame: game.
+	self assert: (board isCellInverted: 5).
+
+	card2 := ReversePolarityCard forCell: 5.
+	card2 activateFor: ship1 inGame: game.
+	self deny: (board isCellInverted: 5).
+
+	card3 := ReversePolarityCard forCell: 5.
+	card3 activateFor: ship1 inGame: game.
+	self assert: (board isCellInverted: 5)
 ]

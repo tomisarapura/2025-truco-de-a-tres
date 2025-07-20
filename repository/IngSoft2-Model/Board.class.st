@@ -222,7 +222,7 @@ Board >> initializeWithCells: aCount length: aLengthInParsecs andWormholes: aCol
     ^ self
 ]
 
-{ #category : 'method' }
+{ #category : 'validation' }
 Board >> isCellInverted: aCell [
 
     ^ (self activeCardsOnCell: aCell) size odd
