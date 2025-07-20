@@ -23,7 +23,7 @@ Class {
 { #category : 'initialize' }
 Game class >> startWithShips: someShips board: aBoard dice: someDices laps: aNumberLaps [
 
-        self validateMinimumShips: someShips.
+	self validateMinimumShips: someShips.
 	self validateShips: someShips.
 	self validateBoard: aBoard.
 	self validateDice: someDices.
@@ -164,13 +164,26 @@ Game >> hasWonByLaps: aShip [
 ]
 
 { #category : 'initialization' }
+Game >> initializeFuelForShips [
+
+	| maxRoll |
+	maxRoll := dice maxRoll * 2.
+	spaceShips do: [ :ship |
+		ship increaseMaxFuelBy: maxRoll.
+		ship increaseFuelBy: maxRoll ]
+]
+
+{ #category : 'initialization' }
 Game >> initializeWithShips: someShips board: aBoard dice: someDices laps: aNumberLaps [
 
-	spaceShips := someShips.
 	board := aBoard.
-	board registerShips: someShips.
 	dice := someDices.
+	spaceShips := someShips.
+	self initializeFuelForShips.
+	board registerShips: someShips.
+
 	totalLaps := aNumberLaps.
+
 
 	turnManager := TurnManager withShips: someShips.
 

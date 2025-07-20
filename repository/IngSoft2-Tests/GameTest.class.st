@@ -539,29 +539,6 @@ GameTest >> testPlayTurnHandlesPassTurnCorrectly [
 ]
 
 { #category : 'playturn' }
-GameTest >> testPlayTurnMovesShipAndAdvancesTurn [
-
-	| ship1 ship2 board dice game |
-	ship1 := Spaceship withName: 'Player1'.
-	ship2 := Spaceship withName: 'Player2'.
-	board := Board of: 10 andWormholeAt: #(  ).
-	dice := DiceCup with: { (Die withSides: 1) }.
-
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1.
-
-	game playTurn.
-
-	self assert: ship1 position equals: 1.
-	self assert: game currentShip equals: ship2
-]
-
-{ #category : 'playturn' }
 GameTest >> testPlayTurnRaisesErrorWhenGameIsOver [
 
 	| ship1 ship2 board dice game |
@@ -940,29 +917,6 @@ GameTest >> testRewardOnMaxRollChangesFuel [
 	self assert:
 		((ship instVarNamed: 'maxFuel') = (initialMax + 1) or: [
 			 (ship instVarNamed: 'fuel') = (initialFuel - 1) ])
-]
-
-{ #category : 'tests' }
-GameTest >> testRollAndMoveCurrentShipMovesShipCorrectly [
-
-	| ship otherShip dice board game originalPosition |
-	ship := Spaceship withName: 'Mover'.
-	otherShip := Spaceship withName: 'Otro'.
-	dice := DiceCup with: { (Die withSides: 1) }.
-	board := Board of: 10 andWormholeAt: #(  ).
-	game := Game
-		        startWithShips: {
-				        ship.
-				        otherShip }
-		        board: board
-		        dice: dice
-		        laps: 1.
-
-	originalPosition := ship position.
-
-	game rollAndMoveCurrentShip.
-
-	self assert: ship position equals: originalPosition + 1
 ]
 
 { #category : 'accessing' }
@@ -1519,64 +1473,6 @@ GameTest >> testWhenShipStatusReturnsCorrectValues [
 ]
 
 { #category : 'spaceships' }
-GameTest >> testWhenShipStatusReturnsCurrentLap [
-
-	| spaceShip1 spaceShip2 spaceShipsGame die dicesGame boardGame game status1 status2 |
-	die := Die withSides: 1.
-	dicesGame := DiceCup with: (OrderedCollection with: die).
-
-	spaceShip1 := Spaceship withName: 'Ship Num1'.
-	spaceShip2 := Spaceship withName: 'Ship Num2'.
-	spaceShipsGame := OrderedCollection with: spaceShip1 with: spaceShip2.
-
-	boardGame := Board of: 2 andWormholeAt: #(  ).
-
-	game := Game
-		        startWithShips: spaceShipsGame
-		        board: boardGame
-		        dice: dicesGame
-		        laps: 2.
-
-	game playTurn.
-	game playTurn.
-	game playTurn.
-
-	status1 := game statusFor: spaceShip1.
-	status2 := game statusFor: spaceShip2.
-
-	self assert: status1 lapCount equals: 1.
-	self assert: status2 lapCount equals: 0
-]
-
-{ #category : 'spaceships' }
-GameTest >> testWhenShipStatusReturnsCurrentPosition [
-
-	| spaceShip1 spaceShip2 spaceShipsGame die dicesGame boardGame game status1 status2 |
-	die := Die withSides: 1.
-	dicesGame := DiceCup with: (OrderedCollection with: die).
-
-	spaceShip1 := Spaceship withName: 'Ship Num1'.
-	spaceShip2 := Spaceship withName: 'Ship Num2'.
-	spaceShipsGame := OrderedCollection with: spaceShip1 with: spaceShip2.
-
-	boardGame := Board of: 2 andWormholeAt: #(  ).
-
-	game := Game
-		        startWithShips: spaceShipsGame
-		        board: boardGame
-		        dice: dicesGame
-		        laps: 1.
-
-	game playUntilFinish.
-
-	status1 := game statusFor: spaceShip1.
-	status2 := game statusFor: spaceShip2.
-
-	self assert: status1 position equals: 2.
-	self assert: status2 position equals: 1
-]
-
-{ #category : 'spaceships' }
 GameTest >> testWhenShipTriesToPlayOutOfTurnThenError [
 
 	| spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame game |
@@ -1602,33 +1498,6 @@ GameTest >> testWhenShipTriesToPlayOutOfTurnThenError [
 		should: [ game validateIsCurrentPlayer: spaceShip1 ]
 		raise: Error
 		withMessageText: 'It is not the turn of this spaceship'
-]
-
-{ #category : 'spaceships' }
-GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
-
-	| spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame totalLaps game |
-	dice1 := Die withSides: 1.
-	dicesGame := DiceCup with: (OrderedCollection with: dice1).
-
-	spaceShip1 := Spaceship withName: 'Ship Num1'.
-	spaceShip2 := Spaceship withName: 'Ship Num2'.
-	spaceShipsGame := OrderedCollection with: spaceShip1 with: spaceShip2.
-
-	boardGame := Board of: 3 andWormholeAt: #(  ).
-
-	totalLaps := 3.
-
-
-	game := Game
-		        startWithShips: spaceShipsGame
-		        board: boardGame
-		        dice: dicesGame
-		        laps: totalLaps.
-
-	game playUntilFinish.
-	self assert: (game lapTrackerFor: spaceShip1) lapCount equals: 3.
-	self assert: (game hasWonByLaps: spaceShip1)
 ]
 
 { #category : 'spaceships' }

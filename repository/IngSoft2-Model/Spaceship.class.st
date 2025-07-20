@@ -84,6 +84,12 @@ Spaceship >> hasReachedGoalOn: aBoard [
 ]
 
 { #category : 'fuel' }
+Spaceship >> increaseFuelBy: someFuel [
+
+	fuel := fuel + someFuel
+]
+
+{ #category : 'fuel' }
 Spaceship >> increaseMaxFuelBy: anAmount [
     maxFuel := maxFuel + anAmount.
 ]
