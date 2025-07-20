@@ -94,6 +94,40 @@ ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testInvertedCardEffectAffectsOthers [
+
+	| card cell ship otherShip1 otherShip2 board game initialCards |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	ship := Spaceship withName: 'John Doe'.
+	otherShip1 := Spaceship withName: 'Jane Doe'.
+	otherShip2 := Spaceship withName: 'Bob Smith'.
+
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: CardEffect new toCell: cell.
+
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip1.
+				        otherShip2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	initialCards := ship cards size.
+
+	card activateFor: ship inGame: game.
+
+	board moveShip: ship to: cell.
+	board applyEffectTo: ship.
+
+	self assert: ship cards size equals: initialCards.
+	self assert: otherShip1 cards size equals: initialCards + 1.
+	self assert: otherShip2 cards size equals: initialCards + 1
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testInvertedHyperGravityAffectsOthers [
 
 	| card cell ship1 ship2 board game |
