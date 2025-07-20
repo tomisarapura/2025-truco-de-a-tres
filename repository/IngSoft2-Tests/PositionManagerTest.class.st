@@ -82,6 +82,26 @@ PositionManagerTest >> testMoveShipToUpdatesPosition [
 ]
 
 { #category : 'tests - instance' }
+PositionManagerTest >> testMultipleSequentialMoves [
+
+	| ship manager |
+	ship := Spaceship withName: 'Sequential'.
+	manager := PositionManager forShips: { ship }.
+
+	manager moveShip: ship by: 3.
+	self assert: ship position equals: 3.
+
+	manager moveShip: ship by: -1.
+	self assert: ship position equals: 2.
+
+	manager moveShip: ship to: 5.
+	self assert: ship position equals: 5.
+
+	manager moveShip: ship by: -10.
+	self assert: ship position equals: 0
+]
+
+{ #category : 'tests - instance' }
 PositionManagerTest >> testPositionOfReturnsCurrentPosition [
 
 	| ship manager |
@@ -89,4 +109,22 @@ PositionManagerTest >> testPositionOfReturnsCurrentPosition [
 	manager := PositionManager forShips: { ship }.
 	manager moveShip: ship by: 2.
 	self assert: (manager positionOf: ship) equals: 2
+]
+
+{ #category : 'tests - instance' }
+PositionManagerTest >> testPositionsReturnsAllPositions [
+
+	| ship1 ship2 manager positions |
+	ship1 := Spaceship withName: 'Ship1'.
+	ship2 := Spaceship withName: 'Ship2'.
+	manager := PositionManager forShips: {
+			           ship1.
+			           ship2 }.
+
+	manager moveShip: ship1 to: 3.
+	manager moveShip: ship2 to: 7.
+
+	positions := manager positions.
+	self assert: (positions at: ship1) equals: 3.
+	self assert: (positions at: ship2) equals: 7
 ]
