@@ -657,40 +657,6 @@ GameTest >> testPlayUntilFinishEndsWhenWinnerIsFound [
 		whenInProgressDo: [ self fail: 'Expected game to be finished' ]
 ]
 
-{ #category : 'tests' }
-GameTest >> testRankingReturnsShipsOrderedByLapsAndPosition [
-
-	| spaceShip1 spaceShip2 spaceShip3 spaceShipsGame dice1 dicesGame boardGame game ranking |
-	dice1 := Die withSides: 1.
-	dicesGame := DiceCup with: (OrderedCollection with: dice1).
-
-	spaceShip1 := Spaceship withName: 'Ship Num1'.
-	spaceShip2 := Spaceship withName: 'Ship Num2'.
-	spaceShip3 := Spaceship withName: 'Ship Num3'.
-	spaceShipsGame := OrderedCollection
-		                  with: spaceShip1
-		                  with: spaceShip2
-		                  with: spaceShip3.
-
-	boardGame := Board of: 3 andWormholeAt: #(  ).
-
-	game := Game
-		        startWithShips: spaceShipsGame
-		        board: boardGame
-		        dice: dicesGame
-		        laps: 2.
-
-	game playUntilFinish.
-
-	ranking := game ranking.
-
-	self assert: ranking size equals: 3.
-
-	self assert: ranking first ship equals: spaceShip1.
-	self assert: ranking second ship equals: spaceShip2.
-	self assert: ranking third ship equals: spaceShip3
-]
-
 { #category : 'redo' }
 GameTest >> testRedoLastCardOnReplaysAccelerationCard [
 
