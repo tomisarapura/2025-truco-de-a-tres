@@ -274,3 +274,35 @@ ReversePolarityCardTest >> testInvertedNoEffectAffectsNobody [
 	self assert: otherShip position equals: 8.
 	self assert: ship position equals: cell
 ]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
+
+	| card cell ship1 ship2 board game wormhole |
+	cell := 5.
+	wormhole := Wormhole from: 5 to: 9.
+
+	card := ReversePolarityCard forCell: cell.
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
+
+	board := Board of: 10 andWormholeAt: { wormhole }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	board moveShip: ship1 to: 0.
+	board moveShip: ship2 to: 3.
+
+	card activateFor: ship1 inGame: game.
+
+	board moveShip: ship1 to: cell.
+	board applyEffectTo: ship1.
+
+	self assert: ship1 position equals: 5.
+	self assert: ship2 position equals: 9
+]
