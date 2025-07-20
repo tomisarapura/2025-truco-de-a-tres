@@ -22,6 +22,20 @@ TurnManagerTest >> testAdvanceTurnCyclesAndIncrementsTurn [
 ]
 
 { #category : 'tests' }
+TurnManagerTest >> testForShipsValidatesInput [
+
+	| invalidInput |
+	invalidInput := 'not a collection of ships'.
+	self should: [ PositionManager forShips: invalidInput ] raise: Error.
+
+	invalidInput := { 'not a ship'. 42 }.
+	self should: [ PositionManager forShips: invalidInput ] raise: Error.
+
+	invalidInput := OrderedCollection new.
+	self should: [ PositionManager forShips: invalidInput ] raise: Error
+]
+
+{ #category : 'tests' }
 TurnManagerTest >> testInitializeWithShipsReturnsSelf [
 	| ship1 ship2 manager result |
     ship1 := Spaceship withName: 'X'.

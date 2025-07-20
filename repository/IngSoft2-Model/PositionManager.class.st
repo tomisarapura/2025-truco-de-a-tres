@@ -20,9 +20,11 @@ PositionManager class >> forShips: someShips [
 PositionManager class >> validateShips: someShips [
 
 	(someShips isCollection and: [
-		 someShips allSatisfy: [ :each | each isKindOf: Spaceship ] ])
+		 someShips notEmpty and: [
+			 someShips allSatisfy: [ :each | each isKindOf: Spaceship ] ] ])
 		ifFalse: [
-		self error: 'Ships must be a collection of Spaceship instances' ]
+			self error:
+				'Ships must be a non-empty collection of Spaceship instances' ]
 ]
 
 { #category : 'initialization' }

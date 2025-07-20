@@ -47,29 +47,32 @@ PositionManagerTest >> testMoveShipBackwardDoesNotGoBelowZero [
 
 { #category : 'tests - instance' }
 PositionManagerTest >> testMoveShipForwardUpdatesPosition [
-    | ship manager |
-    ship := Spaceship withName: 'Runner'.
-    manager := PositionManager forShips: { ship }.
-    manager moveShip: ship by: 3.
-    self assert: ship position equals: 3.
-    self assert: (manager positionOf: ship) equals: 3.
+
+	| ship manager |
+	ship := Spaceship withName: 'Runner'.
+	manager := PositionManager forShips: { ship }.
+	manager moveShip: ship by: 3.
+	self assert: ship position equals: 3.
+	self assert: (manager positionOf: ship) equals: 3
 ]
 
 { #category : 'tests - instance' }
 PositionManagerTest >> testMoveShipToUpdatesPosition [
-    | ship manager |
-    ship := Spaceship withName: 'Mover'.
-    manager := PositionManager forShips: { ship }.
-    manager moveShip: ship to: 4.
-    self assert: ship position equals: 4.
-    self assert: (manager positionOf: ship) equals: 4.
+
+	| ship manager |
+	ship := Spaceship withName: 'Mover'.
+	manager := PositionManager forShips: { ship }.
+	manager moveShip: ship to: 4.
+	self assert: ship position equals: 4.
+	self assert: (manager positionOf: ship) equals: 4
 ]
 
 { #category : 'tests - instance' }
 PositionManagerTest >> testPositionOfReturnsCurrentPosition [
-    | ship manager |
-    ship := Spaceship withName: 'Query'.
-    manager := PositionManager forShips: { ship }.
-    manager moveShip: ship by: 2.
-    self assert: (manager positionOf: ship) equals: 2.
+
+	| ship manager |
+	ship := Spaceship withName: 'Query'.
+	manager := PositionManager forShips: { ship }.
+	manager moveShip: ship by: 2.
+	self assert: (manager positionOf: ship) equals: 2
 ]
