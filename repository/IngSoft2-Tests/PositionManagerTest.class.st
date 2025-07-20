@@ -17,6 +17,20 @@ PositionManagerTest >> testForShipsInitializesPositions [
     self assert: (manager positionOf: ship2) equals: 7.
 ]
 
+{ #category : 'tests' }
+PositionManagerTest >> testForShipsValidatesInput [
+
+	| invalidInput |
+	invalidInput := 'not a collection of ships'.
+	self should: [ PositionManager forShips: invalidInput ] raise: Error.
+
+	invalidInput := { 'not a ship'. 42 }.
+	self should: [ PositionManager forShips: invalidInput ] raise: Error.
+
+	invalidInput := OrderedCollection new.
+	self should: [ PositionManager forShips: invalidInput ] raise: Error
+]
+
 { #category : 'tests - instance' }
 PositionManagerTest >> testInitializeForShipsReturnsSelf [
 
