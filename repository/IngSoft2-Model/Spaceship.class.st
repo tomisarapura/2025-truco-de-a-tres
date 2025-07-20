@@ -115,22 +115,22 @@ Spaceship >> lap [
 	^ lap
 ]
 
-{ #category : 'methods' }
+{ #category : 'move' }
 Spaceship >> moveBack: steps [
 
 	position := position - steps max: 0
 ]
 
-{ #category : 'methods' }
+{ #category : 'move' }
 Spaceship >> moveForward: steps [
 
-	position := position + steps
+	position := position + steps max: 0
 ]
 
-{ #category : 'methods' }
+{ #category : 'move' }
 Spaceship >> moveTo: aPosition [
 
-    position := aPosition.
+    position := aPosition max: 0.
 
 ]
 
