@@ -14,6 +14,10 @@ EffectDecorator >> applyEffectTo: aShip inBoard: aBoard [
 	
 ]
 
+{ #category : 'operations' }
+EffectDecorator >> applyInvertedTo: aSpaceship inBoard: aBoard [
+]
+
 { #category : 'instance creation' }
 EffectDecorator >> applyTo: aShip [
     | board |

@@ -64,15 +64,15 @@ AtomicBombEffectTest >> testApplyEffectToOnEmptyBoardDoesNotError [
 { #category : 'tests' }
 AtomicBombEffectTest >> testApplyToDoesNothing [
 
-    | ship effect |
+	| ship effect board |
+	ship := Spaceship withName: 'Solo'.
+	board := Board of: 5 andWormholeAt: {  }.
+	ship moveTo: 5.
+	
+	effect := AtomicBombEffect new.
+	effect applyTo: ship inBoard: board.
 
-    ship := Spaceship withName: 'Solo'.
-    ship moveTo: 5.
-
-    effect := AtomicBombEffect new.
-    effect applyTo: ship.
-
-    self assert: ship position equals: 5.
+	self assert: ship position equals: 5
 ]
 
 { #category : 'tests' }
