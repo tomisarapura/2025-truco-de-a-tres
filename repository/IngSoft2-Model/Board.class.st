@@ -142,9 +142,15 @@ Board >> applyWormholeIfPresentAt: aPosition [
 		                     wormhole hasEntryAt: aPosition ]
 		                     ifNone: [ nil ].
 
-	wormholeWithEntry
-		ifNil: [ ^ aPosition ]
-		ifNotNil: [ ^ wormholeWithEntry exit ]
+	wormholeWithEntry ifNil: [ ^ aPosition ].
+
+	(self isCellInverted: aPosition)
+		ifTrue: [
+			shipsOnBoard do: [ :ship |
+				(self positionOf: ship) = aPosition ifFalse: [
+					self moveShip: ship to: wormholeWithEntry exit ] ].
+			^ aPosition ]
+		ifFalse: [ ^ wormholeWithEntry exit ]
 ]
 
 { #category : 'testing' }
@@ -245,8 +251,14 @@ Board >> moveShip: aShip forward: steps [
 { #category : 'spaceships' }
 Board >> moveShip: aShip to: aPosition [
 
+	| actualPosition |
 	self reviewRegisteredShips.
-	positionManager moveShip: aShip to: aPosition
+	actualPosition := self applyWormholeIfPresentAt: aPosition.
+
+	(positionManager positionOf: aShip) = actualPosition ifTrue: [
+		^ self ].
+
+	positionManager moveShip: aShip to: actualPosition
 ]
 
 { #category : 'spaceships' }
