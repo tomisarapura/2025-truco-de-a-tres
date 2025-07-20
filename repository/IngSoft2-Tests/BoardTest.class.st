@@ -38,12 +38,23 @@ BoardTest >> testApplyEffectToDoesNothingIfNoEffect [
 { #category : 'tests - instance' }
 BoardTest >> testApplyWormholeIfPresentReturnsExit [
 
-    | board wormhole |
+	| ship1 ship2 wormhole board dice game |
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
 
-    wormhole := Wormhole from: 2 to: 7.
-    board := Board of: 10 andWormholeAt: { wormhole }.
+	wormhole := Wormhole from: 2 to: 7.
+	board := Board of: 10 andWormholeAt: { wormhole }.
 
-    self assert: (board applyWormholeIfPresentAt: 2) equals: 7.
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+
+	self assert: (board applyWormholeIfPresentAt: 2) equals: 7
 ]
 
 { #category : 'tests - instance' }
@@ -585,13 +596,24 @@ BoardTest >> testStepsFromLightYearsConvertsCorrectly [
 
 { #category : 'tests - instance' }
 BoardTest >> testWormholeTransportsCorrectly [
-    | board |
-    board := Board of: 20 andWormholeAt: (OrderedCollection withAll: {
-        Wormhole from: 2 to: 10.
-        Wormhole from: 10 to: 2.
-    }).
 
-    self assert: (board applyWormholeIfPresentAt: 2) equals: 10.
-    self assert: (board applyWormholeIfPresentAt: 10) equals: 2.
+	| ship1 ship2 board dice game |
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
 
+	board := Board of: 20 andWormholeAt: (OrderedCollection withAll: {
+				          (Wormhole from: 2 to: 10).
+				          (Wormhole from: 10 to: 2) }).
+
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+
+	self assert: (board applyWormholeIfPresentAt: 2) equals: 10.
+	self assert: (board applyWormholeIfPresentAt: 10) equals: 2
 ]

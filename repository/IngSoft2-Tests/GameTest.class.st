@@ -20,16 +20,23 @@ GameTest >> should: anErrorBlock raise: anErrorClass withMessageText: errorMessa
 
 { #category : 'tests' }
 GameTest >> testActiveCardsReturnsAllActiveCards [
-    | ship1 ship2 board dice game card |
-    ship1 := Spaceship withName: 'A'.
-    ship2 := Spaceship withName: 'B'.
-    board := Board of: 5 andWormholeAt: {}.
-    dice := DiceCup with: { Die withSides: 1 }.
-    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
-    card := AccelerationCard new.
-    ship1 addActiveCard: card.
-    self assert: (game activeCards size) equals: 1.
-    self assert: (game activeCards includes: card).
+
+	| ship1 ship2 board dice game card |
+	ship1 := Spaceship withName: 'A'.
+	ship2 := Spaceship withName: 'B'.
+	board := Board of: 5 andWormholeAt: {  }.
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	card := AccelerationCard new.
+	ship1 addActiveCard: card.
+	self assert: game activeCards size equals: 1.
+	self assert: (game activeCards includes: card)
 ]
 
 { #category : 'tests' }
