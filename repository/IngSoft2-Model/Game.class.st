@@ -23,7 +23,7 @@ Class {
 { #category : 'initialize' }
 Game class >> startWithShips: someShips board: aBoard dice: someDices laps: aNumberLaps [
 
-        self validateMinimumShips: someShips.
+	self validateMinimumShips: someShips.
 	self validateShips: someShips.
 	self validateBoard: aBoard.
 	self validateDice: someDices.
@@ -164,13 +164,26 @@ Game >> hasWonByLaps: aShip [
 ]
 
 { #category : 'initialization' }
+Game >> initializeFuelForShips [
+
+	| maxRoll |
+	maxRoll := dice maxRoll * 2.
+	spaceShips do: [ :ship |
+		ship increaseMaxFuelBy: maxRoll.
+		ship increaseFuelBy: maxRoll ]
+]
+
+{ #category : 'initialization' }
 Game >> initializeWithShips: someShips board: aBoard dice: someDices laps: aNumberLaps [
 
-	spaceShips := someShips.
 	board := aBoard.
-	board registerShips: someShips.
 	dice := someDices.
+	spaceShips := someShips.
+	self initializeFuelForShips.
+	board registerShips: someShips.
+
 	totalLaps := aNumberLaps.
+
 
 	turnManager := TurnManager withShips: someShips.
 
@@ -348,18 +361,27 @@ Game >> rewardForMaxRollTo: aShip [
 { #category : 'process actions' }
 Game >> rollAndMoveCurrentShip [
 
-	| steps newPosition modified |
+	| steps newPosition modified cellEffect |
 	lastPreviousPosition := self currentShip position.
 	steps := dice roll.
 	steps = dice maxRoll ifTrue: [
 		self rewardForMaxRollTo: self currentShip ].
 	modified := self modifyRoll: steps forShip: self currentShip.
-	modified >= 0
-		ifTrue: [
-			newPosition := board
+
+	newPosition := modified >= 0
+		               ifTrue: [
+			               board
 				               determineNewPositionFrom: lastPreviousPosition
-				               after: modified.
-			board moveShip: self currentShip to: newPosition ]
+				               after: modified ]
+		               ifFalse: [
+		               lastPreviousPosition - modified abs max: 0 ].
+
+	cellEffect := board effectAt: newPosition.
+	(cellEffect isKindOf: HyperGravityEffect) ifTrue: [
+		modified < cellEffect requiredRoll ifTrue: [
+			newPosition := lastPreviousPosition ] ].
+	modified >= 0
+		ifTrue: [ board moveShip: self currentShip to: newPosition ]
 		ifFalse: [ board moveShip: self currentShip backward: modified abs ].
 	lastSteps := modified
 ]

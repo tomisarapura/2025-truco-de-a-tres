@@ -9,3 +9,12 @@ Class {
 CardEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
         aSpaceship addCard: (aBoard drawCard).
 ]
+
+{ #category : 'operations' }
+CardEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
+
+	aBoard shipsOnBoard do: [ :ship |
+		ship == aSpaceship ifFalse: [
+			self applyEffectTo: ship inBoard: aBoard ] ].
+	^ self
+]

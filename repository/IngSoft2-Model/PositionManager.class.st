@@ -20,9 +20,11 @@ PositionManager class >> forShips: someShips [
 PositionManager class >> validateShips: someShips [
 
 	(someShips isCollection and: [
-		 someShips allSatisfy: [ :each | each isKindOf: Spaceship ] ])
+		 someShips notEmpty and: [
+			 someShips allSatisfy: [ :each | each isKindOf: Spaceship ] ] ])
 		ifFalse: [
-		self error: 'Ships must be a collection of Spaceship instances' ]
+			self error:
+				'Ships must be a non-empty collection of Spaceship instances' ]
 ]
 
 { #category : 'initialization' }
@@ -33,29 +35,35 @@ PositionManager >> initializeForShips: someShips [
 ]
 
 { #category : 'updating' }
-PositionManager >> moveShip: aShip backward: steps [
+PositionManager >> moveShip: aShip by: steps [
 
-	| newPos |
-	newPos := (self positionOf: aShip) - steps.
-	newPos < 0 ifTrue: [ newPos := 0 ].
+	| currentPos newPos |
+	
+	currentPos := self positionOf: aShip.
+	newPos := currentPos + steps max: 0.
 	self moveShip: aShip to: newPos
-]
-
-{ #category : 'updating' }
-PositionManager >> moveShip: aShip forward: steps [
-
-	self moveShip: aShip to: (self positionOf: aShip) + steps
 ]
 
 { #category : 'updating' }
 PositionManager >> moveShip: aShip to: aPosition [
 
-	positions at: aShip put: aPosition.
-	aShip moveTo: aPosition
+	aPosition < 0
+		ifTrue: [
+			positions at: aShip put: 0.
+			aShip moveTo: 0 ]
+		ifFalse: [
+			positions at: aShip put: aPosition.
+			aShip moveTo: aPosition ]
 ]
 
 { #category : 'accessing' }
 PositionManager >> positionOf: aShip [
 
 	^ positions at: aShip
+]
+
+{ #category : 'accessing' }
+PositionManager >> positions [
+
+	^ positions
 ]

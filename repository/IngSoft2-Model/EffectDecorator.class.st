@@ -10,7 +10,12 @@ Class {
 
 { #category : 'operations' }
 EffectDecorator >> applyEffectTo: aShip inBoard: aBoard [
-    "Subclasses implement specific behavior"
+
+	
+]
+
+{ #category : 'operations' }
+EffectDecorator >> applyInvertedTo: aSpaceship inBoard: aBoard [
 ]
 
 { #category : 'instance creation' }
@@ -23,10 +28,11 @@ EffectDecorator >> applyTo: aShip [
 
 { #category : 'instance creation' }
 EffectDecorator >> applyTo: aShip inBoard: aBoard [
-    | board |
-    board := aBoard ifNil: [ NullBoard new ] ifNotNil: [ aBoard ].
-    self applyEffectTo: aShip inBoard: board.
-    wrapped ifNotNil: [ wrapped applyTo: aShip inBoard: board ].
+
+	| board |
+	board := aBoard ifNil: [ NullBoard new ] ifNotNil: [ aBoard ].
+	self applyEffectTo: aShip inBoard: board.
+	wrapped ifNotNil: [ wrapped applyTo: aShip inBoard: board ]
 ]
 
 { #category : 'instance creation' }

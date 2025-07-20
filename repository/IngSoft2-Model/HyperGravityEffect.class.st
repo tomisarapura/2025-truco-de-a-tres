@@ -23,6 +23,15 @@ HyperGravityEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
 	^ aSpaceship
 ]
 
+{ #category : 'operations' }
+HyperGravityEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
+
+	aBoard shipsOnBoard do: [ :ship |
+		ship == aSpaceship ifFalse: [
+			self applyEffectTo: ship inBoard: aBoard ] ].
+	^ self
+]
+
 { #category : 'initialization' }
 HyperGravityEffect >> initialize [
 	super initialize.
