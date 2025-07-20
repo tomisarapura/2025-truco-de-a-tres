@@ -1,69 +1,50 @@
 Class {
 	#name : 'BlackHoleEffectTest',
 	#superclass : 'TestCase',
-	#instVars : [
-		'ship1',
-		'ship2',
-		'board',
-		'dice',
-		'game'
-	],
 	#category : 'IngSoft2-Tests',
 	#package : 'IngSoft2-Tests'
 }
 
 { #category : 'tests' }
-BlackHoleEffectTest >> setUp [
-
-	ship1 := Spaceship withName: 'John Doe'.
-	ship2 := Spaceship withName: 'Jane Doe'.
-	board := Board of: 5 andWormholeAt: {  }.
-	dice := DiceCup with: { (Die withSides: 1) }.
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1
-]
-
-{ #category : 'tests' }
 BlackHoleEffectTest >> testApplyEffectDecreasesTurbine [
 
-	| effect |
-	board moveShip: ship1 to: 6.
-
+	| ship effect |
+	ship := Spaceship withName: 'John Doe'.
+	ship moveTo: 6.
 	effect := BlackHoleEffect new.
 
-	self assert: ship1 remainingTurbines equals: 3.
+	self assert: ship remainingTurbines equals: 3.
 
-	effect applyTo: ship1 inBoard: board.
+	effect applyTo: ship.
 
-	self assert: ship1 position equals: 2.
-	self assert: ship1 remainingTurbines equals: 2
+	self assert: ship position equals: 2.
+	self assert: ship remainingTurbines equals: 2
 ]
 
 { #category : 'tests' }
 BlackHoleEffectTest >> testApplyToDoesNotGoBelowZero [
 
-	| effect |
-	board moveShip: ship1 to: 3.
-	effect := BlackHoleEffect new.
-	effect applyTo: ship1 inBoard: board.
+    | ship effect |
 
-	self assert: ship1 position equals: 0
+    ship := Spaceship withName: 'Boundary'.
+    ship moveTo: 3.
+
+    effect := BlackHoleEffect new.
+    effect applyTo: ship.
+
+    self assert: ship position equals: 0.
 ]
 
 { #category : 'tests' }
 BlackHoleEffectTest >> testApplyToMovesShipBackBy4 [
 
-	| effect |
-	board moveShip: ship1 to: 6.
-	ship1 moveTo: 6.
+    | ship effect |
 
-	effect := BlackHoleEffect new.
-	effect applyTo: ship1 inBoard: board.
+    ship := Spaceship withName: 'Voyager'.
+    ship moveTo: 6.
 
-	self assert: ship1 position equals: 2
+    effect := BlackHoleEffect new.
+    effect applyTo: ship.
+
+    self assert: ship position equals: 2.
 ]

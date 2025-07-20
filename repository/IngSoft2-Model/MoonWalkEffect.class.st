@@ -7,12 +7,19 @@ Class {
 
 { #category : 'operations' }
 MoonWalkEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
-
-	aBoard shipsOnBoard do: [ :ship |
-		ship = aSpaceship ifFalse: [ aBoard moveShip: ship backward: 2 ] ]
+        ^ self.
 ]
 
 { #category : 'operations' }
-MoonWalkEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
-    ^ self
+MoonWalkEffect >> applyTo: aSpaceship inContextOf: allSpaceships [
+    self applyTo: aSpaceship inContextOf: allSpaceships inBoard: nil.
+]
+
+{ #category : 'operations' }
+MoonWalkEffect >> applyTo: aSpaceship inContextOf: allSpaceships inBoard: aBoard [
+        | board |
+        board := aBoard ifNil: [ NullBoard new ] ifNotNil: [ aBoard ].
+        allSpaceships do: [:ship | ship = aSpaceship ifFalse: [
+            board moveShip: ship backward: 2
+        ]].
 ]

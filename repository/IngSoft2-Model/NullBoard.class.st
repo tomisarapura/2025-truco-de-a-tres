@@ -19,9 +19,3 @@ NullBoard >> moveShip: aShip forward: steps [
 NullBoard >> moveShip: aShip to: aPosition [
     aShip moveTo: aPosition.
 ]
-
-{ #category : 'spaceships' }
-NullBoard >> shipsOnBoard [
-
-	^ OrderedCollection new.
-]

@@ -8,36 +8,25 @@ Class {
 { #category : 'tests' }
 EffectDecoratorTest >> testApplyToWithoutWrappedEffectDoesNothing [
 
-	| decorator ship1 ship2 board dice game originalPosition |
-	decorator := EffectDecorator new.
+    | decorator ship originalPosition |
 
+    decorator := EffectDecorator new.
 
-	ship1 := Spaceship withName: 'John Doe'.
-	ship2 := Spaceship withName: 'Jane Doe'.
-	board := Board of: 5 andWormholeAt: {  }.
-	dice := DiceCup with: { (Die withSides: 1) }.
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1.
-	board moveShip: ship1 to: 3.
+    ship := Spaceship withName: 'SoloShip'.
+    ship moveTo: 3.
 
-	originalPosition := ship1 position.
+    originalPosition := ship position.
 
-	decorator applyTo: ship1 inBoard: board.
+    decorator applyTo: ship.
 
-	self assert: ship1 position equals: originalPosition
+    self assert: ship position equals: originalPosition.
 ]
 
 { #category : 'tests' }
 EffectDecoratorTest >> testEffectDecoratorDecorateSetsWrappedEffect [
-
 	| baseEffect decorator |
 	baseEffect := NoEffect new.
 	decorator := EffectDecorator new decorate: baseEffect.
 
-	self assert: decorator wrapped equals: baseEffect
+	self assert: decorator wrapped equals: baseEffect.
 ]

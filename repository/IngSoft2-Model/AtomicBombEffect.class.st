@@ -7,12 +7,14 @@ Class {
 
 { #category : 'operations' }
 AtomicBombEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
-
-	(aBoard shipsOnBoard ifNil: [ ^ self ]) do: [ :ship |
-		aBoard moveShip: ship to: 0 ]
+    ^ self
 ]
 
 { #category : 'operations' }
-AtomicBombEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
-    ^ self
+AtomicBombEffect >> applyTo: aSpaceship inContextOf: allSpaceships inBoard: aBoard [
+    | board |
+    board := aBoard ifNil: [ NullBoard new ] ifNotNil: [ aBoard ].
+    allSpaceships do: [:ship |
+        board moveShip: ship to: 0
+    ].
 ]
