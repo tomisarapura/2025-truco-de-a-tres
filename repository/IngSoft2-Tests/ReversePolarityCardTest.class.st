@@ -94,6 +94,66 @@ ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testInvertedHyperGravityAffectsOthers [
+
+	| card cell ship1 ship2 board game |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: HyperGravityEffect new toCell: cell.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	board moveShip: ship1 to: 3.
+	board moveShip: ship2 to: 8.
+
+	card activateFor: ship1 inGame: game.
+	board moveShip: ship1 to: cell.
+	board applyEffectTo: ship1.
+
+	self assert: ship1 position equals: cell.
+	self assert: ship1 remainingTurbines equals: 3.
+	self assert: ship2 position equals: 7.
+	self assert: ship2 remainingTurbines equals: 2
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testInvertedHyperGravityDoesNotAffectSelf [
+
+	| card cell ship1 ship2 board game |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	ship1 := Spaceship withName: 'John Doe'.
+	ship2 := Spaceship withName: 'Jane Doe'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: HyperGravityEffect new toCell: cell.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	board moveShip: ship1 to: 3.
+	board moveShip: ship2 to: 8.
+
+	card activateFor: ship1 inGame: game.
+	board moveShip: ship1 to: cell.
+	board applyEffectTo: ship1.
+
+	self assert: ship1 position equals: cell.
+	self assert: ship1 remainingTurbines equals: 3
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testInvertedHyperJumpAffectsOthers [
 	| card cell ship otherShip board game hyperJump |
 	cell := 5.
