@@ -119,16 +119,24 @@ Board >> allActiveCards [
 ]
 
 { #category : 'method' }
+Board >> applyEffect: anEffect to: aSpaceship inverted: aBoolean [
+
+	aBoolean
+		ifTrue: [ anEffect applyInvertedTo: aSpaceship inBoard: self ]
+		ifFalse: [ anEffect applyTo: aSpaceship inBoard: self ]
+]
+
+{ #category : 'method' }
 Board >> applyEffectTo: aSpaceship [
 
-	| cellPosition effect shouldInvert |
+	| cellPosition effect |
 	cellPosition := self positionOf: aSpaceship.
 	effect := self effectAt: cellPosition.
+
 	effect ifNotNil: [
+		| shouldInvert |
 		shouldInvert := self isCellInverted: cellPosition.
-		shouldInvert
-			ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
-			ifFalse: [ effect applyTo: aSpaceship inBoard: self ] ].
+		self applyEffect: effect to: aSpaceship inverted: shouldInvert ].
 
 	^ self
 ]
