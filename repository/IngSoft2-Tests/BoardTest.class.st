@@ -38,12 +38,25 @@ BoardTest >> testApplyEffectToDoesNothingIfNoEffect [
 { #category : 'tests - instance' }
 BoardTest >> testApplyWormholeIfPresentReturnsExit [
 
-    | board wormhole |
+	| board wormhole ship1 ship2 ship3 allShips game |
+	wormhole := Wormhole from: 2 to: 7.
+	board := Board of: 10 andWormholeAt: { wormhole }.
 
-    wormhole := Wormhole from: 2 to: 7.
-    board := Board of: 10 andWormholeAt: { wormhole }.
+	ship1 := Spaceship withName: 'Red'.
+	ship2 := Spaceship withName: 'Blue'.
+	ship3 := Spaceship withName: 'Green'.
+	allShips := {
+		            ship1.
+		            ship2.
+		            ship3 }.
+	game := Game
+		        startWithShips: allShips
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 5.
 
-    self assert: (board applyWormholeIfPresentAt: 2) equals: 7.
+
+	self assert: (board applyWormholeIfPresentAt: 2) equals: 7
 ]
 
 { #category : 'tests - instance' }
@@ -572,13 +585,24 @@ BoardTest >> testStepsFromLightYearsConvertsCorrectly [
 
 { #category : 'tests - instance' }
 BoardTest >> testWormholeTransportsCorrectly [
-    | board |
-    board := Board of: 20 andWormholeAt: (OrderedCollection withAll: {
-        Wormhole from: 2 to: 10.
-        Wormhole from: 10 to: 2.
-    }).
 
-    self assert: (board applyWormholeIfPresentAt: 2) equals: 10.
-    self assert: (board applyWormholeIfPresentAt: 10) equals: 2.
+	| board ship1 ship2 ship3 allShips game |
+	board := Board of: 20 andWormholeAt: (OrderedCollection withAll: {
+				          (Wormhole from: 2 to: 10).
+				          (Wormhole from: 10 to: 2) }).
 
+	ship1 := Spaceship withName: 'Red'.
+	ship2 := Spaceship withName: 'Blue'.
+	ship3 := Spaceship withName: 'Green'.
+	allShips := {
+		            ship1.
+		            ship2.
+		            ship3 }.
+	game := Game
+		        startWithShips: allShips
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 5.
+	self assert: (board applyWormholeIfPresentAt: 2) equals: 10.
+	self assert: (board applyWormholeIfPresentAt: 10) equals: 2
 ]
