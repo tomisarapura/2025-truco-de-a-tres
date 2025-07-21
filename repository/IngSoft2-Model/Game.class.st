@@ -74,25 +74,28 @@ Game class >> validateShips: someShips [
 
 { #category : 'process actions' }
 Game >> activeCards [
+
 	| collection |
-    collection := OrderedCollection new.
-    spaceShips do: [ :ship | collection addAll: ship activeCards ].
-    ^ collection
+	collection := OrderedCollection new.
+	spaceShips do: [ :ship | collection addAll: ship activeCards ].
+	^ collection
 ]
 
 { #category : 'process actions' }
 Game >> advanceTurn [
 
-        turnManager advanceTurn
+	turnManager advanceTurn
 ]
 
 { #category : 'process actions' }
 Game >> allStatuses [
+
 	^ self spaceShips collect: [ :ship | self statusFor: ship ]
 ]
 
 { #category : 'accessing' }
 Game >> board [
+
 	^ board
 ]
 

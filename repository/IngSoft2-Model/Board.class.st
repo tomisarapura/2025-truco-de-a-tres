@@ -246,18 +246,16 @@ Board >> isPositionReachedAt: aPosition [
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip backward: steps [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
-    positionManager moveShip: aShip backward: steps.
+
+	positionManager ifNil: [ self error: 'Board has no registered ships' ].
+	positionManager moveShip: aShip backward: steps
 ]
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip forward: steps [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
-    positionManager moveShip: aShip forward: steps.
+
+	positionManager ifNil: [ self error: 'Board has no registered ships' ].
+	positionManager moveShip: aShip forward: steps
 ]
 
 { #category : 'spaceships' }
