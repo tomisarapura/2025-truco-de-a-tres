@@ -21,6 +21,23 @@ EffectDecoratorTest >> testApplyToWithBoard [
 ]
 
 { #category : 'tests' }
+EffectDecoratorTest >> testApplyToWithWrappedEffectAndBoard [
+
+	| decorator ship wrappedEffect board |
+	wrappedEffect := MoonWalkEffect new.
+	decorator := EffectDecorator new decorate: wrappedEffect.
+
+	ship := Spaceship withName: 'MainShip'.
+	board := NullBoard new.
+	ship moveTo: 5.
+
+	decorator applyTo: ship inBoard: board.
+
+	"La posición no debería cambiar"
+	self assert: ship position equals: 5
+]
+
+{ #category : 'tests' }
 EffectDecoratorTest >> testApplyToWithoutWrappedEffectDoesNothing [
 
     | decorator ship originalPosition |
