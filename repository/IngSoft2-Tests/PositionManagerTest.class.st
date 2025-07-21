@@ -66,6 +66,16 @@ PositionManagerTest >> testMoveShipForwardUpdatesPosition [
 ]
 
 { #category : 'tests - instance' }
+PositionManagerTest >> testMoveShipToNegativePositionSetsZero [
+
+	| ship manager |
+	ship := Spaceship withName: 'Ship'.
+	manager := PositionManager forShips: { ship }.
+	manager moveShip: ship to: -5.
+	self assert: (manager positionOf: ship) equals: 0
+]
+
+{ #category : 'tests - instance' }
 PositionManagerTest >> testMoveShipToUpdatesPosition [
     | ship manager |
     ship := Spaceship withName: 'Mover'.
