@@ -150,6 +150,36 @@ ReversePolarityCardTest >> testDoubleInvertedHyperGravityReturnsToNormal [
 	self assert: ship remainingTurbines equals: 2
 ]
 
+{ #category : 'doubleInvertedEffects' }
+ReversePolarityCardTest >> testDoubleInvertedHyperJumpReturnsToNormal [
+
+	| card1 card2 ship otherShip board game hyperJump |
+	hyperJump := HyperJumpEffect withValues: #( 10 ).
+	card1 := ReversePolarityCard forCell: 5.
+	card2 := ReversePolarityCard forCell: 5.
+	ship := Spaceship withName: 'Ship'.
+	otherShip := Spaceship withName: 'OtherShip'.
+	board := Board of: 100 length: 100 andWormholeAt: #(  ).
+	board assignEffect: hyperJump toCell: 5.
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card1 activateFor: ship inGame: game.
+	card2 activateFor: ship inGame: game.
+
+	board moveShip: ship to: 5.
+	board moveShip: otherShip to: 8.
+	board applyEffectTo: ship.
+
+	self assert: ship position equals: 15.
+	self assert: otherShip position equals: 8
+]
+
 { #category : 'tests' }
 ReversePolarityCardTest >> testEdgeCaseFirstCell [
     | card |
