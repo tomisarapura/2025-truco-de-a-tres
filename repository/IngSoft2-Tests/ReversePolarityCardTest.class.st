@@ -224,6 +224,30 @@ ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testInvertedNoEffectDoesNothing [
+
+	| card ship1 ship2 board game |
+	card := ReversePolarityCard forCell: 3.
+	ship1 := Spaceship withName: 'Ship1'.
+	ship2 := Spaceship withName: 'Ship2'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: NoEffect new toCell: 3.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card activateFor: ship1 inGame: game.
+	board moveShip: ship1 to: 3.
+	board applyEffectTo: ship1.
+
+	self assert: ship1 position equals: 3
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
 	| card cell ship1 ship2 wormhole board game |
 	cell := 5.
