@@ -6,6 +6,19 @@ Class {
 }
 
 { #category : 'tests' }
+EffectDecoratorTest >> testApplyInvertedTo [
+
+	| decorator ship |
+	decorator := EffectDecorator new.
+	ship := Spaceship withName: 'TestShip'.
+	ship moveTo: 7.
+
+	decorator applyInvertedTo: ship inBoard: NullBoard new.
+
+	self assert: ship position equals: 7
+]
+
+{ #category : 'tests' }
 EffectDecoratorTest >> testApplyToWithBoard [
 
 	| decorator ship board originalPosition |
