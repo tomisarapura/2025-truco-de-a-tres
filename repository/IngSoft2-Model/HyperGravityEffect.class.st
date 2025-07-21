@@ -24,15 +24,6 @@ HyperGravityEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
 ]
 
 { #category : 'initialization' }
-HyperGravityEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
-
-	aBoard shipsOnBoard do: [ :ship |
-		ship == aSpaceship ifFalse: [
-			self applyEffectTo: ship inBoard: aBoard ] ].
-	^ self
-]
-
-{ #category : 'initialization' }
 HyperGravityEffect >> initialize [
 	super initialize.
 	requiredRoll := 4.
