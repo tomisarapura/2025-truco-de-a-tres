@@ -29,9 +29,10 @@ PositionManager class >> validateShips: someShips [
 
 { #category : 'initialization' }
 PositionManager >> initializeForShips: someShips [
-    positions := Dictionary new.
-    someShips do: [ :ship | positions at: ship put: ship position ].
-    ^ self
+
+	positions := Dictionary new.
+	someShips do: [ :ship | positions at: ship put: ship position ].
+	^ self
 ]
 
 { #category : 'updating' }
@@ -52,8 +53,10 @@ PositionManager >> moveShip: aShip forward: steps [
 { #category : 'updating' }
 PositionManager >> moveShip: aShip to: aPosition [
 
-	positions at: aShip put: aPosition.
-	aShip moveTo: aPosition
+	| validPosition |
+	validPosition := aPosition max: 0.
+	positions at: aShip put: validPosition.
+	aShip moveTo: validPosition
 ]
 
 { #category : 'accessing' }
