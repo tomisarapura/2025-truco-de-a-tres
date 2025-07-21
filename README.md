@@ -1,6 +1,6 @@
 # Ingenieria del Software II - Template
 
-![GHA Status](https://github.com/uca-argentina/project-template/actions/workflows/GHA.yml/badge.svg)
+![GHA Status](https://github.com/tomisarapura/2025-truco-de-a-tres/actions/workflows/GHA.yml/badge.svg)
 [![Coverage Status](https://coveralls.io/github/tomisarapura/2025-truco-de-a-tres/badge.svg?branch=master)](https://coveralls.io/github/tomisarapura/2025-truco-de-a-tres?branch=master)
 
 ## Metacello
