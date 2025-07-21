@@ -7,21 +7,24 @@ Class {
 
 { #category : 'spaceships' }
 NullBoard >> moveShip: aShip backward: steps [
-    aShip moveBack: steps.
+
+	aShip moveBack: steps
 ]
 
 { #category : 'spaceships' }
 NullBoard >> moveShip: aShip forward: steps [
-    aShip moveForward: steps.
+
+	aShip moveForward: steps
 ]
 
 { #category : 'spaceships' }
 NullBoard >> moveShip: aShip to: aPosition [
-    aShip moveTo: aPosition.
+
+	aShip moveTo: aPosition
 ]
 
 { #category : 'spaceships' }
 NullBoard >> shipsOnBoard [
 
-	^ OrderedCollection new.
+	^ OrderedCollection new
 ]
