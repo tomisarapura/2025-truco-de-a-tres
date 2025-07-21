@@ -7,5 +7,6 @@ Class {
 
 { #category : 'enumerating' }
 GameInProgress >> whenFinishedDo: finishedBlock whenInProgressDo: inProgressBlock [
-    ^ inProgressBlock value.
+
+	^ inProgressBlock value
 ]

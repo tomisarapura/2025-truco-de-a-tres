@@ -37,27 +37,32 @@ Distance class >> validatePositiveNumber: aNumber errorMessage: aMessage [
 
 { #category : 'accessing' }
 Distance >> asLightYears [
-    ^ unit asLightYears: value
+
+	^ unit asLightYears: value
 ]
 
 { #category : 'accessing' }
 Distance >> asParsecs [
-    ^ unit asParsecs: value
+
+	^ unit asParsecs: value
 ]
 
 { #category : 'initialization' }
 Distance >> initializeWith: aNumber unit: aUnit [
-    value := aNumber.
-    unit := aUnit.
-    ^ self
+
+	value := aNumber.
+	unit := aUnit.
+	^ self
 ]
 
 { #category : 'accessing' }
 Distance >> unit [
-    ^ unit
+
+	^ unit
 ]
 
 { #category : 'accessing' }
 Distance >> value [
-    ^ value
+
+	^ value
 ]

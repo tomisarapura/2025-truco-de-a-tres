@@ -9,15 +9,17 @@ Class {
 }
 
 { #category : 'initialize' }
-ReversePolarityCard class >> for: aCell [
+ReversePolarityCard class >> forCell: aCell [
+	
+	self validateCell: aCell.
 
 	^ self new initializeForCell: aCell
 ]
 
 { #category : 'initialize' }
-ReversePolarityCard class >> forCell: aCell [
+ReversePolarityCard class >> validateCell: aCell [
 
-	^ self new initializeForCell: aCell
+	(aCell isInteger and: aCell >= 0) ifFalse: [ ^ self error: 'Cell has to be postive' ]
 ]
 
 { #category : 'playing' }

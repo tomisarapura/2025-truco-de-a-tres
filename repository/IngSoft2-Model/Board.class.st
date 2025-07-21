@@ -119,37 +119,49 @@ Board >> allActiveCards [
 ]
 
 { #category : 'method' }
+Board >> applyEffect: anEffect to: aSpaceship inverted: aBoolean [
+
+	aBoolean
+		ifTrue: [ anEffect applyInvertedTo: aSpaceship inBoard: self ]
+		ifFalse: [ anEffect applyTo: aSpaceship inBoard: self ]
+]
+
+{ #category : 'method' }
 Board >> applyEffectTo: aSpaceship [
 
-	| cellPosition effect shouldInvert |
+	| cellPosition effect |
 	cellPosition := self positionOf: aSpaceship.
 	effect := self effectAt: cellPosition.
+
 	effect ifNotNil: [
+		| shouldInvert |
 		shouldInvert := self isCellInverted: cellPosition.
-		shouldInvert
-			ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
-			ifFalse: [ effect applyTo: aSpaceship inBoard: self ] ].
+		self applyEffect: effect to: aSpaceship inverted: shouldInvert ].
 
 	^ self
+]
+
+{ #category : 'method' }
+Board >> applyWormholeEffect: aWormhole at: aPosition [
+
+	(self isCellInverted: aPosition)
+		ifTrue: [
+			self shipsOnBoard do: [ :ship |
+				ship position = aPosition ifFalse: [
+					self moveShip: ship to: aWormhole exit ] ].
+			^ aPosition ]
+		ifFalse: [ ^ aWormhole exit ]
 ]
 
 { #category : 'method' }
 Board >> applyWormholeIfPresentAt: aPosition [
 
 	| wormhole |
-	wormhole := wormholes
-		            detect: [ :w | w hasEntryAt: aPosition ]
-		            ifNone: [ nil ].
+	wormhole := self wormholeAt: aPosition.
 
 	wormhole ifNil: [ ^ aPosition ].
 
-	(self isCellInverted: aPosition)
-		ifTrue: [
-			self shipsOnBoard do: [ :ship |
-				ship position = aPosition ifFalse: [
-					self moveShip: ship to: wormhole exit ] ].
-			^ aPosition ]
-		ifFalse: [ ^ wormhole exit ]
+	^ self applyWormholeEffect: wormhole at: aPosition
 ]
 
 { #category : 'testing' }
@@ -189,9 +201,8 @@ Board >> determineNewPositionFrom: aPosition after: steps [
 
 { #category : 'deck' }
 Board >> drawCard [
-    "Return a random card from the deck"
 
-    ^ CardDeck randomCard
+	^ CardDeck randomCard
 ]
 
 { #category : 'method' }
@@ -235,18 +246,16 @@ Board >> isPositionReachedAt: aPosition [
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip backward: steps [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
-    positionManager moveShip: aShip backward: steps.
+
+	positionManager ifNil: [ self error: 'Board has no registered ships' ].
+	positionManager moveShip: aShip backward: steps
 ]
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip forward: steps [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
-    positionManager moveShip: aShip forward: steps.
+
+	positionManager ifNil: [ self error: 'Board has no registered ships' ].
+	positionManager moveShip: aShip forward: steps
 ]
 
 { #category : 'spaceships' }
@@ -324,4 +333,10 @@ Board >> stepsFromParsecs: someParsecs [
 { #category : 'accessing' }
 Board >> totalLengthInParsecs [
     ^ totalLengthInParsecs
+]
+
+{ #category : 'method' }
+Board >> wormholeAt: aPosition [
+
+	^ wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ]
 ]

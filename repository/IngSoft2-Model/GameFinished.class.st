@@ -15,15 +15,18 @@ GameFinished class >> withWinner: aShip [
 
 { #category : 'initialization' }
 GameFinished >> initializeWithWinner: aShip [
-    winner := aShip.
+
+	winner := aShip
 ]
 
 { #category : 'initialization' }
 GameFinished >> whenFinishedDo: finishedBlock whenInProgressDo: inProgressBlock [
-    ^ finishedBlock value: winner.
+
+	^ finishedBlock value: winner
 ]
 
 { #category : 'initialization' }
 GameFinished >> winner [
-    ^ winner.
+
+	^ winner
 ]

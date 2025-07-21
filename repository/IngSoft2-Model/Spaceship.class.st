@@ -31,21 +31,25 @@ Spaceship class >> withName: aName [
 
 { #category : 'methods' }
 Spaceship >> activeCards [
+
 	^ activeCards
 ]
 
 { #category : 'methods' }
 Spaceship >> addActiveCard: aCard [
-	activeCards add: aCard.
+
+	activeCards add: aCard
 ]
 
 { #category : 'methods' }
 Spaceship >> addCard: aCard [
-	cards add: aCard.
+
+	cards add: aCard
 ]
 
 { #category : 'methods' }
 Spaceship >> cards [
+
 	^ cards
 ]
 
@@ -85,7 +89,8 @@ Spaceship >> hasReachedGoalOn: aBoard [
 
 { #category : 'fuel' }
 Spaceship >> increaseMaxFuelBy: anAmount [
-    maxFuel := maxFuel + anAmount.
+
+	maxFuel := maxFuel + anAmount
 ]
 
 { #category : 'initialize' }
@@ -124,14 +129,16 @@ Spaceship >> moveBack: steps [
 { #category : 'methods' }
 Spaceship >> moveForward: steps [
 
+	| stepsPositive |
+	stepsPositive := steps abs.
+
 	position := position + steps
 ]
 
 { #category : 'methods' }
 Spaceship >> moveTo: aPosition [
 
-    position := aPosition.
-
+	position := aPosition max: 0
 ]
 
 { #category : 'accessing' }

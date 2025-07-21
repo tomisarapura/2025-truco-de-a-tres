@@ -20,24 +20,26 @@ PositionManager class >> forShips: someShips [
 PositionManager class >> validateShips: someShips [
 
 	(someShips isCollection and: [
-		 someShips allSatisfy: [ :each | each isKindOf: Spaceship ] ])
+		 someShips notEmpty and: [
+			 someShips allSatisfy: [ :each | each isKindOf: Spaceship ] ] ])
 		ifFalse: [
-		self error: 'Ships must be a collection of Spaceship instances' ]
+			self error:
+				'Ships must be a non-empty collection of Spaceship instances' ]
 ]
 
 { #category : 'initialization' }
 PositionManager >> initializeForShips: someShips [
-    positions := Dictionary new.
-    someShips do: [ :ship | positions at: ship put: ship position ].
-    ^ self
+
+	positions := Dictionary new.
+	someShips do: [ :ship | positions at: ship put: ship position ].
+	^ self
 ]
 
 { #category : 'updating' }
 PositionManager >> moveShip: aShip backward: steps [
 
 	| newPos |
-	newPos := (self positionOf: aShip) - steps.
-	newPos < 0 ifTrue: [ newPos := 0 ].
+	newPos := (self positionOf: aShip) - steps max: 0.
 	self moveShip: aShip to: newPos
 ]
 
@@ -50,8 +52,10 @@ PositionManager >> moveShip: aShip forward: steps [
 { #category : 'updating' }
 PositionManager >> moveShip: aShip to: aPosition [
 
-	positions at: aShip put: aPosition.
-	aShip moveTo: aPosition
+	| validPosition |
+	validPosition := aPosition max: 0.
+	positions at: aShip put: validPosition.
+	aShip moveTo: validPosition
 ]
 
 { #category : 'accessing' }

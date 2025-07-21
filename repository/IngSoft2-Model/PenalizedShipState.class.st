@@ -55,10 +55,11 @@ PenalizedShipState >> penalizeFor: aNumber [
 
 { #category : 'penalty' }
 PenalizedShipState >> reducePenalty [
-    self decreaseTurns.
-    ^ self hasPenalty
-        ifTrue: [ self ]
-        ifFalse: [ NormalShipState new ].
+
+	self decreaseTurns.
+	^ self hasPenalty
+		  ifTrue: [ self ]
+		  ifFalse: [ NormalShipState new ]
 ]
 
 { #category : 'penalty' }
