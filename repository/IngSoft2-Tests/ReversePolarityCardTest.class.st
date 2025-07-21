@@ -29,12 +29,42 @@ ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testCellWithNoEffect [
+
+	| ship1 ship2 board dice game card |
+	ship1 := Spaceship withName: 'Ship1'.
+	ship2 := Spaceship withName: 'Ship2'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	card := ReversePolarityCard forCell: 3.
+
+	card activateFor: ship1 inGame: Game new.
+	board moveShip: ship1 to: 3.
+
+	self shouldnt: [ board applyEffectTo: ship1 ] raise: Error
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testCreateCardWithTargetCell [
 
 	| card cell |
 	cell := 5.
 	card := ReversePolarityCard forCell: cell.
 	self assert: card targetCell equals: cell
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testEdgeCaseFirstCell [
+    | card |
+    card := ReversePolarityCard forCell: 0.
+    self assert: card targetCell equals: 0.
 ]
 
 { #category : 'tests' }
@@ -73,6 +103,13 @@ ReversePolarityCardTest >> testEvenNumberOfReversePolarityCardsCancelOut [
 	self assert: ship position equals: 5 - 1.
 	self assert: otherShip position equals: 8.
 	self assert: ship remainingTurbines equals: 2
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testInitializeForCellDirectly [
+    | card |
+    card := ReversePolarityCard new initializeForCell: 3.
+    self assert: card targetCell equals: 3.
 ]
 
 { #category : 'invertedEffects' }
@@ -344,6 +381,14 @@ ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
 	self assert: ship2 position equals: 8.
 	self assert: (ship1 activeCards includes: card).
 
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testIsProperPermanentCard [
+    | card |
+    card := ReversePolarityCard forCell: 3.
+    self assert: (card isKindOf: PermanentCard).
+    self assert: card class superclass equals: PermanentCard.
 ]
 
 { #category : 'tests' }
