@@ -185,3 +185,40 @@ ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 	self assert: otherShip position equals: 8.
 	self assert: ship position equals: cell
 ]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testMultipleReversePolarityCardsCancelOut [
+
+	| card1 card2 cell ship otherShip board game hyperGravity |
+	cell := 5.
+	hyperGravity := HyperGravityEffect new.
+
+	card1 := ReversePolarityCard forCell: cell.
+	card2 := ReversePolarityCard forCell: cell.
+	ship := Spaceship withName: 'Ship 1'.
+	otherShip := Spaceship withName: 'Ship 2'.
+
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: hyperGravity toCell: cell.
+
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 6) })
+		        laps: 1.
+
+
+	board moveShip: ship to: cell.
+	board moveShip: otherShip to: 8.
+
+	card1 activateFor: ship inGame: game.
+	card2 activateFor: ship inGame: game.
+
+	board applyEffectTo: ship.
+
+	self assert: ship position equals: cell - 1. 
+	self assert: otherShip position equals: 8.
+	self assert: ship remainingTurbines equals: 2
+]
