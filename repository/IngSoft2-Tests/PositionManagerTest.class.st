@@ -7,14 +7,27 @@ Class {
 
 { #category : 'tests - class' }
 PositionManagerTest >> testForShipsInitializesPositions [
-    | ship1 ship2 manager |
-    ship1 := Spaceship withName: 'Alpha'.
-    ship2 := Spaceship withName: 'Beta'.
-    ship1 moveTo: 5.
-    ship2 moveTo: 7.
-    manager := PositionManager forShips: { ship1 . ship2 }.
-    self assert: (manager positionOf: ship1) equals: 5.
-    self assert: (manager positionOf: ship2) equals: 7.
+
+	| ship1 ship2 manager |
+	ship1 := Spaceship withName: 'Alpha'.
+	ship2 := Spaceship withName: 'Beta'.
+	ship1 moveTo: 5.
+	ship2 moveTo: 7.
+	manager := PositionManager forShips: {
+			           ship1.
+			           ship2 }.
+	self assert: (manager positionOf: ship1) equals: 5.
+	self assert: (manager positionOf: ship2) equals: 7
+]
+
+{ #category : 'tests - class' }
+PositionManagerTest >> testForShipsValidatesInput [
+
+	| invalidInput |
+	invalidInput := { 'not a ship'. 123 }.
+	self should: [ PositionManager forShips: invalidInput ] raise: Error.
+
+	self should: [ PositionManager forShips: #(  ) ] raise: Error
 ]
 
 { #category : 'tests - instance' }
