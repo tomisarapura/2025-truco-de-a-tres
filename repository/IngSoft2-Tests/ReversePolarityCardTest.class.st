@@ -29,6 +29,20 @@ ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testActivateTwiceOnSameShip [
+
+	| card ship game |
+	card := ReversePolarityCard forCell: 3.
+	ship := Spaceship withName: 'Test Ship'.
+	game := Game new.
+
+	card activateFor: ship inGame: game.
+	card activateFor: ship inGame: game.
+
+	self assert: ship activeCards size equals: 2
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testCellWithNoEffect [
 
 	| ship1 ship2 board dice game card |
@@ -281,6 +295,15 @@ ReversePolarityCardTest >> testEvenNumberOfReversePolarityCardsCancelOut [
 	self assert: ship position equals: 5 - 1.
 	self assert: otherShip position equals: 8.
 	self assert: ship remainingTurbines equals: 2
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testForClassMethod [
+
+	| card cell |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	self assert: card targetCell equals: cell
 ]
 
 { #category : 'tests' }
@@ -567,6 +590,12 @@ ReversePolarityCardTest >> testIsProperPermanentCard [
     card := ReversePolarityCard forCell: 3.
     self assert: (card isKindOf: PermanentCard).
     self assert: card class superclass equals: PermanentCard.
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testNegativeCell [
+
+	self should: [ ReversePolarityCard forCell: -1 ] raise: Error
 ]
 
 { #category : 'tests' }
