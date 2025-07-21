@@ -222,3 +222,32 @@ ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 	self assert: otherShip position equals: 8.
 	self assert: ship position equals: cell
 ]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
+	| card cell ship1 ship2 wormhole board game |
+	cell := 5.
+	card := ReversePolarityCard forCell: cell.
+	
+	wormhole := Wormhole from: 5 to: 8.
+	
+	ship1 := Spaceship withName: 'Ship 1'.
+	ship2 := Spaceship withName: 'Ship 2'.
+	
+	board := Board of: 10 andWormholeAt: { wormhole }.
+	
+	game := Game
+		startWithShips: { ship1. ship2 }
+		board: board
+		dice: (DiceCup with: { Die withSides: 1 })
+		laps: 1.
+	
+	card activateFor: ship1 inGame: game.
+	board moveShip: ship2 to: 3.
+	board moveShip: ship1 to: cell.
+
+	self assert: ship1 position equals: 5.
+	self assert: ship2 position equals: 8.
+	self assert: (ship1 activeCards includes: card).
+
+]

@@ -240,10 +240,13 @@ Board >> moveShip: aShip forward: steps [
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip to: aPosition [
-    positionManager ifNil: [
-        self error: 'Board has no registered ships'.
-    ].
-    positionManager moveShip: aShip to: aPosition.
+
+	| finalPosition |
+	positionManager ifNil: [ self error: 'Board has no registered ships' ].
+	
+	finalPosition := self applyWormholeIfPresentAt: aPosition.
+
+	positionManager moveShip: aShip to: finalPosition
 ]
 
 { #category : 'spaceships' }
