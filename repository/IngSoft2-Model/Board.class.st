@@ -201,9 +201,8 @@ Board >> determineNewPositionFrom: aPosition after: steps [
 
 { #category : 'deck' }
 Board >> drawCard [
-    "Return a random card from the deck"
 
-    ^ CardDeck randomCard
+	^ CardDeck randomCard
 ]
 
 { #category : 'method' }
