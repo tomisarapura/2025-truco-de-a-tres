@@ -38,6 +38,44 @@ ReversePolarityCardTest >> testCreateCardWithTargetCell [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testEvenNumberOfReversePolarityCardsCancelOut [
+
+	| card1 card2 card3 card4 ship otherShip board game |
+	card1 := ReversePolarityCard forCell: 5.
+	card2 := ReversePolarityCard forCell: 5.
+	card3 := ReversePolarityCard forCell: 5.
+	card4 := ReversePolarityCard forCell: 5.
+
+	ship := Spaceship withName: 'Ship'.
+	otherShip := Spaceship withName: 'OtherShip'.
+
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: HyperGravityEffect new toCell: 5.
+
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card1 activateFor: ship inGame: game.
+	card2 activateFor: ship inGame: game.
+	card3 activateFor: ship inGame: game.
+	card4 activateFor: ship inGame: game.
+
+	board moveShip: ship to: 5.
+	board moveShip: otherShip to: 8.
+
+	board applyEffectTo: ship.
+
+	self assert: ship position equals: 5 - 1.
+	self assert: otherShip position equals: 8.
+	self assert: ship remainingTurbines equals: 2
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testInvertedAtomicBombAffectsNobody [
 
 	| card cell ship otherShip board game |
@@ -306,4 +344,37 @@ ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
 	self assert: ship2 position equals: 8.
 	self assert: (ship1 activeCards includes: card).
 
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testOddNumberOfReversePolarityCardsInvertEffect [
+    | card1 card2 card3 ship otherShip board game  |
+    
+    card1 := ReversePolarityCard forCell: 4.
+    card2 := ReversePolarityCard forCell: 4.
+    card3 := ReversePolarityCard forCell: 4.
+    
+    ship := Spaceship withName: 'Ship'.
+    otherShip := Spaceship withName: 'OtherShip'.
+    
+    board := Board of: 10 andWormholeAt: #().
+    board assignEffect: MoonWalkEffect new toCell: 4.
+    
+    game := Game
+            startWithShips: { ship. otherShip }
+            board: board
+            dice: (DiceCup with: { (Die withSides: 1) })
+            laps: 1.
+    
+    card1 activateFor: ship inGame: game.
+    card2 activateFor: ship inGame: game.
+    card3 activateFor: ship inGame: game.
+    
+    board moveShip: ship to: 4.
+    board moveShip: otherShip to: 7.
+    
+    board applyEffectTo: ship.
+    
+    self assert: ship position equals: 4.
+    self assert: otherShip position equals: 7. 
 ]
