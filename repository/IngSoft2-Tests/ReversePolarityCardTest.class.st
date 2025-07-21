@@ -91,6 +91,35 @@ ReversePolarityCardTest >> testDoubleInvertedBlackHoleReturnsToNormal [
 ]
 
 { #category : 'doubleInvertedEffects' }
+ReversePolarityCardTest >> testDoubleInvertedCardEffectReturnsToNormal [
+
+	| card1 card2 ship otherShip board game initialCards |
+	card1 := ReversePolarityCard forCell: 5.
+	card2 := ReversePolarityCard forCell: 5.
+	ship := Spaceship withName: 'Ship'.
+	otherShip := Spaceship withName: 'OtherShip'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: CardEffect new toCell: 5.
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	initialCards := ship cards size.
+	card1 activateFor: ship inGame: game.
+	card2 activateFor: ship inGame: game.
+
+	board moveShip: ship to: 5.
+	board applyEffectTo: ship.
+
+	self assert: ship cards size equals: initialCards + 1.
+	self assert: otherShip cards size equals: initialCards
+]
+
+{ #category : 'doubleInvertedEffects' }
 ReversePolarityCardTest >> testDoubleInvertedHyperGravityReturnsToNormal [
 
 	| card1 card2 ship otherShip board game hyperGravity |
