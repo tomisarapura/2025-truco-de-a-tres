@@ -43,6 +43,31 @@ ReversePolarityCardTest >> testActivateTwiceOnSameShip [
 ]
 
 { #category : 'tests' }
+ReversePolarityCardTest >> testCancellationCardRemovesEffect [
+
+	| ship1 ship2 board dice game card cancellationCard |
+	ship1 := Spaceship withName: 'Ship1'.
+	ship2 := Spaceship withName: 'Ship2'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	card := ReversePolarityCard forCell: 5.
+
+
+	card activateFor: ship1 inGame: game.
+	cancellationCard := CancellationCard cancelling: card.
+	cancellationCard playOn: ship1 inGame: game.
+
+	self deny: (ship1 activeCards includes: card)
+]
+
+{ #category : 'tests' }
 ReversePolarityCardTest >> testCellWithNoEffect [
 
 	| ship1 ship2 board dice game card |
