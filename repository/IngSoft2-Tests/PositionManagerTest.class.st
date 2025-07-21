@@ -86,6 +86,18 @@ PositionManagerTest >> testMoveShipToUpdatesPosition [
 ]
 
 { #category : 'tests - instance' }
+PositionManagerTest >> testMultipleMovementsConsistency [
+
+	| ship manager |
+	ship := Spaceship withName: 'Ship'.
+	manager := PositionManager forShips: { ship }.
+	manager moveShip: ship forward: 3.
+	manager moveShip: ship backward: 1.
+	manager moveShip: ship to: 7.
+	self assert: (manager positionOf: ship) equals: 7
+]
+
+{ #category : 'tests - instance' }
 PositionManagerTest >> testPositionOfReturnsCurrentPosition [
     | ship manager |
     ship := Spaceship withName: 'Query'.
