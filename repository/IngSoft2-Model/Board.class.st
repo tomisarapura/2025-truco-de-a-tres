@@ -145,9 +145,7 @@ Board >> applyEffectTo: aSpaceship [
 Board >> applyWormholeIfPresentAt: aPosition [
 
 	| wormhole |
-	wormhole := wormholes
-		            detect: [ :w | w hasEntryAt: aPosition ]
-		            ifNone: [ nil ].
+	wormhole := self wormholeAt: aPosition.
 
 	wormhole ifNil: [ ^ aPosition ].
 
@@ -332,4 +330,10 @@ Board >> stepsFromParsecs: someParsecs [
 { #category : 'accessing' }
 Board >> totalLengthInParsecs [
     ^ totalLengthInParsecs
+]
+
+{ #category : 'method' }
+Board >> wormholeAt: aPosition [
+
+	^ wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ]
 ]
