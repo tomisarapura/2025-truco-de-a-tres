@@ -9,8 +9,3 @@ Class {
 NoEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
     ^ self
 ]
-
-{ #category : 'operations' }
-NoEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
-    ^ self
-]

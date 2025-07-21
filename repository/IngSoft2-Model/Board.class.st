@@ -111,21 +111,9 @@ Board >> applyEffectTo: aSpaceship [
 
 { #category : 'initialize' }
 Board >> applyWormholeIfPresentAt: aPosition [
-
-	| wormhole |
-	wormhole := wormholes
-		            detect: [ :w | w hasEntryAt: aPosition ]
-		            ifNone: [ nil ].
-
-	wormhole ifNil: [ ^ aPosition ].
-
-	(self isCellInverted: aPosition)
-		ifTrue: [
-			self shipsOnBoard do: [ :ship |
-				ship position = aPosition ifFalse: [
-					self moveShip: ship to: wormhole exit ] ].
-			^ aPosition ]
-		ifFalse: [ ^ wormhole exit ]
+    ^ (wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ])
+        ifNil: [ aPosition ]
+        ifNotNil: [ :w | w exit ]
 ]
 
 { #category : 'initialize' }
@@ -213,13 +201,10 @@ Board >> moveShip: aShip forward: steps [
 
 { #category : 'spaceships' }
 Board >> moveShip: aShip to: aPosition [
-
-	| finalPosition |
-	positionManager ifNil: [ self error: 'Board has no registered ships' ].
-	
-	finalPosition := self applyWormholeIfPresentAt: aPosition.
-
-	positionManager moveShip: aShip to: finalPosition
+    positionManager ifNil: [
+        self error: 'Board has no registered ships'.
+    ].
+    positionManager moveShip: aShip to: aPosition.
 ]
 
 { #category : 'spaceships' }

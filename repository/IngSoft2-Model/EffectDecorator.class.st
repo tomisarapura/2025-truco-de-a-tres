@@ -14,10 +14,6 @@ EffectDecorator >> applyEffectTo: aShip inBoard: aBoard [
 ]
 
 { #category : 'instance creation' }
-EffectDecorator >> applyInvertedTo: aSpaceship inBoard: aBoard [
-]
-
-{ #category : 'instance creation' }
 EffectDecorator >> applyTo: aShip [
     | board |
     board := NullBoard new.
