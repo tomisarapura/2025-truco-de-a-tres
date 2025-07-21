@@ -75,7 +75,7 @@ ReversePolarityCardTest >> testEvenNumberOfReversePolarityCardsCancelOut [
 	self assert: ship remainingTurbines equals: 2
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedAtomicBombAffectsNobody [
 
 	| card cell ship otherShip board game |
@@ -103,7 +103,7 @@ ReversePolarityCardTest >> testInvertedAtomicBombAffectsNobody [
 	self assert: otherShip position equals: 8
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
 
 	| card cell ship otherShip board game |
@@ -131,7 +131,7 @@ ReversePolarityCardTest >> testInvertedBlackHoleAffectsOthers [
 	self assert: ship position equals: cell
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedCardEffectGivesCardsToOthers [
 
 	| card cell ship1 ship2 ship3 board game initialCards |
@@ -163,7 +163,7 @@ ReversePolarityCardTest >> testInvertedCardEffectGivesCardsToOthers [
 	self assert: ship3 cards size equals: initialCards + 1
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedHyperGravityAffectsOthers [
 
 	| card cell ship otherShip board game hyperGravity |
@@ -196,7 +196,7 @@ ReversePolarityCardTest >> testInvertedHyperGravityAffectsOthers [
 	self assert: otherShip remainingTurbines equals: 2
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedHyperGravityWhenMultipleReversePolarityCardsCancelOut [
 
 	| card1 card2 cell ship otherShip board game hyperGravity |
@@ -233,7 +233,7 @@ ReversePolarityCardTest >> testInvertedHyperGravityWhenMultipleReversePolarityCa
 	self assert: ship remainingTurbines equals: 2
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedHyperJumpAffectsOthers [
 	| card cell ship otherShip board game hyperJump |
 	cell := 5.
@@ -265,7 +265,7 @@ ReversePolarityCardTest >> testInvertedHyperJumpAffectsOthers [
 	self assert: ship position equals: cell.      
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 
 	| card cell ship otherShip board game |
@@ -293,7 +293,7 @@ ReversePolarityCardTest >> testInvertedMoonWalkAffectsNobody [
 	self assert: ship position equals: cell
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedNoEffectDoesNothing [
 
 	| card ship1 ship2 board game |
@@ -317,7 +317,7 @@ ReversePolarityCardTest >> testInvertedNoEffectDoesNothing [
 	self assert: ship1 position equals: 3
 ]
 
-{ #category : 'tests' }
+{ #category : 'invertedEffects' }
 ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
 	| card cell ship1 ship2 wormhole board game |
 	cell := 5.
