@@ -180,6 +180,35 @@ ReversePolarityCardTest >> testDoubleInvertedHyperJumpReturnsToNormal [
 	self assert: otherShip position equals: 8
 ]
 
+{ #category : 'doubleInvertedEffects' }
+ReversePolarityCardTest >> testDoubleInvertedMoonWalkReturnsToNormal [
+
+	| card1 card2 ship otherShip board game |
+	card1 := ReversePolarityCard forCell: 5.
+	card2 := ReversePolarityCard forCell: 5.
+	ship := Spaceship withName: 'Ship'.
+	otherShip := Spaceship withName: 'OtherShip'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: MoonWalkEffect new toCell: 5.
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card1 activateFor: ship inGame: game.
+	card2 activateFor: ship inGame: game.
+
+	board moveShip: ship to: 5.
+	board moveShip: otherShip to: 8.
+	board applyEffectTo: ship.
+
+	self assert: ship position equals: 5.
+	self assert: otherShip position equals: 6
+]
+
 { #category : 'tests' }
 ReversePolarityCardTest >> testEdgeCaseFirstCell [
     | card |
