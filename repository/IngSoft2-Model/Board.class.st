@@ -142,6 +142,18 @@ Board >> applyEffectTo: aSpaceship [
 ]
 
 { #category : 'method' }
+Board >> applyWormholeEffect: aWormhole at: aPosition [
+
+	(self isCellInverted: aPosition)
+		ifTrue: [
+			self shipsOnBoard do: [ :ship |
+				ship position = aPosition ifFalse: [
+					self moveShip: ship to: aWormhole exit ] ].
+			^ aPosition ]
+		ifFalse: [ ^ aWormhole exit ]
+]
+
+{ #category : 'method' }
 Board >> applyWormholeIfPresentAt: aPosition [
 
 	| wormhole |
@@ -149,13 +161,7 @@ Board >> applyWormholeIfPresentAt: aPosition [
 
 	wormhole ifNil: [ ^ aPosition ].
 
-	(self isCellInverted: aPosition)
-		ifTrue: [
-			self shipsOnBoard do: [ :ship |
-				ship position = aPosition ifFalse: [
-					self moveShip: ship to: wormhole exit ] ].
-			^ aPosition ]
-		ifFalse: [ ^ wormhole exit ]
+	^ self applyWormholeEffect: wormhole at: aPosition
 ]
 
 { #category : 'testing' }
