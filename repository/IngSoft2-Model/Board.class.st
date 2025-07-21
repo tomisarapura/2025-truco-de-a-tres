@@ -136,9 +136,20 @@ Board >> applyEffectTo: aSpaceship [
 { #category : 'method' }
 Board >> applyWormholeIfPresentAt: aPosition [
 
-	^ (wormholes detect: [ :w | w hasEntryAt: aPosition ] ifNone: [ nil ])
-		  ifNil: [ aPosition ]
-		  ifNotNil: [ :w | w exit ]
+	| wormhole |
+	wormhole := wormholes
+		            detect: [ :w | w hasEntryAt: aPosition ]
+		            ifNone: [ nil ].
+
+	wormhole ifNil: [ ^ aPosition ].
+
+	(self isCellInverted: aPosition)
+		ifTrue: [
+			self shipsOnBoard do: [ :ship |
+				ship position = aPosition ifFalse: [
+					self moveShip: ship to: wormhole exit ] ].
+			^ aPosition ]
+		ifFalse: [ ^ wormhole exit ]
 ]
 
 { #category : 'testing' }
