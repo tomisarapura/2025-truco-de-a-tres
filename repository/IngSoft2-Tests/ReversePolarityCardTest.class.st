@@ -60,6 +60,37 @@ ReversePolarityCardTest >> testCreateCardWithTargetCell [
 	self assert: card targetCell equals: cell
 ]
 
+{ #category : 'doubleInvertedEffects' }
+ReversePolarityCardTest >> testDoubleInvertedHyperGravityReturnsToNormal [
+
+	| card1 card2 ship otherShip board game hyperGravity |
+	hyperGravity := HyperGravityEffect new.
+	card1 := ReversePolarityCard forCell: 5.
+	card2 := ReversePolarityCard forCell: 5.
+	ship := Spaceship withName: 'Ship'.
+	otherShip := Spaceship withName: 'OtherShip'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: hyperGravity toCell: 5.
+	game := Game
+		        startWithShips: {
+				        ship.
+				        otherShip }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card1 activateFor: ship inGame: game.
+	card2 activateFor: ship inGame: game.
+
+	board moveShip: ship to: 5.
+	board moveShip: otherShip to: 8.
+	board applyEffectTo: ship.
+
+	self assert: ship position equals: 4.
+	self assert: otherShip position equals: 8.
+	self assert: ship remainingTurbines equals: 2
+]
+
 { #category : 'tests' }
 ReversePolarityCardTest >> testEdgeCaseFirstCell [
     | card |
