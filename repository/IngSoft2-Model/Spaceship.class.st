@@ -138,8 +138,7 @@ Spaceship >> moveForward: steps [
 { #category : 'methods' }
 Spaceship >> moveTo: aPosition [
 
-    position := aPosition.
-
+	position := aPosition max: 0
 ]
 
 { #category : 'accessing' }
