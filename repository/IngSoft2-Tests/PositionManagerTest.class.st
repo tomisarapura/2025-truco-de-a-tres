@@ -107,6 +107,16 @@ PositionManagerTest >> testPositionOfReturnsCurrentPosition [
 ]
 
 { #category : 'tests - instance' }
+PositionManagerTest >> testPositionOfUnregisteredShipRaisesError [
+
+	| ship manager |
+	ship := Spaceship withName: 'Unregistered'.
+	manager := PositionManager forShips:
+		           { (Spaceship withName: 'Other') }.
+	self should: [ manager positionOf: ship ] raise: Error
+]
+
+{ #category : 'tests - instance' }
 PositionManagerTest >> testPositionsReturnsDictionary [
 
 	| ship1 ship2 manager positions |
