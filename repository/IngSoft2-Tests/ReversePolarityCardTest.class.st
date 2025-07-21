@@ -460,3 +460,71 @@ ReversePolarityCardTest >> testRemovingReversePolarityCardsChangesEffect [
 	self assert: ship position equals: 5.
 	self assert: otherShip position equals: 8 - 1
 ]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testReversePolarityCardOnAlreadyInvertedEffect [
+
+	| card1 card2 ship1 ship2 board game |
+	card1 := ReversePolarityCard forCell: 4.
+	card2 := ReversePolarityCard forCell: 4.
+	ship1 := Spaceship withName: 'Ship1'.
+	ship2 := Spaceship withName: 'Ship2'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board assignEffect: MoonWalkEffect new toCell: 4.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card1 activateFor: ship1 inGame: game.
+	card2 activateFor: ship1 inGame: game.
+	board moveShip: ship1 to: 4.
+	board applyEffectTo: ship1.
+	self assert: ship1 position equals: 4
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testReversePolarityCardOnCellWithNoEffect [
+
+	| card ship1 ship2 board game |
+	card := ReversePolarityCard forCell: 3.
+	ship1 := Spaceship withName: 'Ship'.
+	ship2 := Spaceship withName: 'Ship'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card activateFor: ship1 inGame: game.
+	board moveShip: ship1 to: 3.
+	self shouldnt: [ board applyEffectTo: ship1 ] raise: Error
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testReversePolarityCardWithNoEffect [
+
+	| card ship1 ship2 board game |
+	card := ReversePolarityCard forCell: 3.
+	ship1 := Spaceship withName: 'Ship'.
+	ship2 := Spaceship withName: 'Ship'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+
+	card activateFor: ship1 inGame: game.
+	board moveShip: ship1 to: 3.
+	self assert: ship1 position equals: 3
+]
