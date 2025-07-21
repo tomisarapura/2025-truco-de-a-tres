@@ -83,3 +83,33 @@ PositionManagerTest >> testPositionOfReturnsCurrentPosition [
     manager moveShip: ship forward: 2.
     self assert: (manager positionOf: ship) equals: 2.
 ]
+
+{ #category : 'tests - instance' }
+PositionManagerTest >> testPositionsReturnsDictionary [
+
+	| ship1 ship2 manager positions |
+	ship1 := Spaceship withName: 'Ship 1'.
+	ship2 := Spaceship withName: 'Ship 2'.
+	manager := PositionManager forShips: {
+			           ship1.
+			           ship2 }.
+	positions := manager positions.
+
+	self assert: positions size equals: 2.
+	self assert: (positions at: ship1) equals: 0.
+	self assert: (positions at: ship2) equals: 0
+]
+
+{ #category : 'tests - class' }
+PositionManagerTest >> testValidateShips [
+
+	| validInput invalidInput |
+	validInput := { (Spaceship withName: 'Valid') }.
+	invalidInput := { 'not a ship' }.
+
+	PositionManager validateShips: validInput.
+
+	self
+		should: [ PositionManager validateShips: invalidInput ]
+		raise: Error
+]
