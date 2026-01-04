@@ -146,9 +146,9 @@ Board >> applyWormholeEffect: aWormhole at: aPosition [
 
 	(self isCellInverted: aPosition)
 		ifTrue: [
-			self shipsOnBoard do: [ :ship |
-				ship position = aPosition ifFalse: [
-					self moveShip: ship to: aWormhole exit ] ].
+			self shipsOnBoard
+				reject: [ :ship | ship position = aPosition ]
+				thenDo: [ :ship | self moveShip: ship to: aWormhole exit ].
 			^ aPosition ]
 		ifFalse: [ ^ aWormhole exit ]
 ]
