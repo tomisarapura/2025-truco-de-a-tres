@@ -30,16 +30,20 @@ ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
 
 { #category : 'tests' }
 ReversePolarityCardTest >> testActivateTwiceOnSameShip [
+    | card ship1 ship2 game board dice |
+    card := ReversePolarityCard forCell: 3.
+    ship1 := Spaceship withName: 'Test Ship'.
+    ship2 := Spaceship withName: 'Dummy Ship'.
+    
+    board := Board of: 10 andWormholeAt: #().
+    dice := DiceCup with: { Die withSides: 1 }.
+    
+    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
 
-	| card ship game |
-	card := ReversePolarityCard forCell: 3.
-	ship := Spaceship withName: 'Test Ship'.
-	game := Game new.
-
-	card activateFor: ship inGame: game.
-	card activateFor: ship inGame: game.
-
-	self assert: ship activeCards size equals: 2
+    card activateFor: ship1 inGame: game.
+    card activateFor: ship1 inGame: game.
+    
+    self assert: ship1 activeCards size equals: 2
 ]
 
 { #category : 'tests' }
@@ -69,25 +73,21 @@ ReversePolarityCardTest >> testCancellationCardRemovesEffect [
 
 { #category : 'tests' }
 ReversePolarityCardTest >> testCellWithNoEffect [
-
-	| ship1 ship2 board dice game card |
-	ship1 := Spaceship withName: 'Ship1'.
-	ship2 := Spaceship withName: 'Ship2'.
-	board := Board of: 10 andWormholeAt: #(  ).
-	dice := DiceCup with: { (Die withSides: 1) }.
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1.
-	card := ReversePolarityCard forCell: 3.
-
-	card activateFor: ship1 inGame: Game new.
-	board moveShip: ship1 to: 3.
-
-	self shouldnt: [ board applyEffectTo: ship1 ] raise: Error
+    | ship1 ship2 board dice game card |
+    ship1 := Spaceship withName: 'Ship1'.
+    ship2 := Spaceship withName: 'Ship2'.
+    board := Board of: 10 andWormholeAt: #().
+    dice := DiceCup with: { (Die withSides: 1) }.
+    
+    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
+    
+    card := ReversePolarityCard forCell: 3.
+    
+    "Usamos la variable 'game' inicializada, no Game new"
+    card activateFor: ship1 inGame: game. 
+    
+    board moveShip: ship1 to: 3.
+    self shouldnt: [ board applyEffectTo: ship1 ] raise: Error
 ]
 
 { #category : 'tests' }
