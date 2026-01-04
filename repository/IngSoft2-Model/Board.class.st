@@ -127,6 +127,20 @@ Board >> applyEffect: anEffect to: aSpaceship inverted: aBoolean [
 ]
 
 { #category : 'method' }
+Board >> applyEffect: anEffect to: aSpaceship withInversionLevel: level [
+
+| actualLevel |
+	actualLevel := level \\ 2. "Por ahora usamos módulo 2 porque hay 2 opciones (par = normal, impar = invertido)"
+	
+	actualLevel = 0 ifTrue: [ "level = 0: efecto normal"
+		anEffect applyTo: aSpaceship inBoard: self ].
+	actualLevel = 1 ifTrue: [  "level = 1: efecto invertido"
+		anEffect applyInvertedTo: aSpaceship inBoard: self ].
+	
+	
+]
+
+{ #category : 'method' }
 Board >> applyEffectTo: aSpaceship [
 
 	| cellPosition effect |
