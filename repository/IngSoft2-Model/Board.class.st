@@ -307,6 +307,16 @@ Board >> randomEffect [
 
 ]
 
+{ #category : 'method' }
+Board >> registerReversePolarityCard: aCard forCell: aCell [
+
+	| cards |
+	cards := reversePolarityCards
+		         at: aCell
+		         ifAbsentPut: [ OrderedCollection new ].
+	cards add: aCard
+]
+
 { #category : 'spaceships' }
 Board >> registerShips: someShips [
 
@@ -352,6 +362,15 @@ Board >> stepsFromParsecs: someParsecs [
 { #category : 'accessing' }
 Board >> totalLengthInParsecs [
     ^ totalLengthInParsecs
+]
+
+{ #category : 'method' }
+Board >> unregisterReversePolarityCard: aCard forCell: aCell [
+
+	| cards |
+	cards := reversePolarityCards at: aCell ifAbsent: [ ^ self ].
+	cards remove: aCard ifAbsent: [  ].
+	cards isEmpty ifTrue: [ reversePolarityCards removeKey: aCell ]
 ]
 
 { #category : 'method' }
