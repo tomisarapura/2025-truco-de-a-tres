@@ -6,12 +6,32 @@ Class {
 }
 
 { #category : 'tests' }
-ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
+ReversePolarityCardTest >> testActivateCardRegistersOnBoard [
 
 	| card ship1 ship2 board dice game |
 	card := ReversePolarityCard forCell: 3.
 	ship1 := Spaceship withName: 'John Doe'.
 	ship2 := Spaceship withName: 'B'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	card activateFor: ship1 inGame: game.
+	self assert: (board reversePolarityCards includes: card)
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testActivateTwiceOnSameShip [
+
+	| card ship1 ship2 game board dice |
+	card := ReversePolarityCard forCell: 3.
+	ship1 := Spaceship withName: 'Test Ship'.
+	ship2 := Spaceship withName: 'Dummy Ship'.
 
 	board := Board of: 10 andWormholeAt: #(  ).
 	dice := DiceCup with: { (Die withSides: 1) }.
@@ -23,27 +43,11 @@ ReversePolarityCardTest >> testActivateCardAddsToActiveCards [
 		        board: board
 		        dice: dice
 		        laps: 1.
-		
+
 	card activateFor: ship1 inGame: game.
-	self assert: (ship1 activeCards includes: card)
-]
+	card activateFor: ship1 inGame: game.
 
-{ #category : 'tests' }
-ReversePolarityCardTest >> testActivateTwiceOnSameShip [
-    | card ship1 ship2 game board dice |
-    card := ReversePolarityCard forCell: 3.
-    ship1 := Spaceship withName: 'Test Ship'.
-    ship2 := Spaceship withName: 'Dummy Ship'.
-    
-    board := Board of: 10 andWormholeAt: #().
-    dice := DiceCup with: { Die withSides: 1 }.
-    
-    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
-
-    card activateFor: ship1 inGame: game.
-    card activateFor: ship1 inGame: game.
-    
-    self assert: ship1 activeCards size equals: 2
+	self assert: board reversePolarityCards size equals: 2
 ]
 
 { #category : 'tests' }
@@ -68,6 +72,30 @@ ReversePolarityCardTest >> testCancellationCardRemovesEffect [
 	cancellationCard := CancellationCard cancelling: card.
 	cancellationCard playOn: ship1 inGame: game.
 
+	self deny: (ship1 activeCards includes: card)
+]
+
+{ #category : 'tests' }
+ReversePolarityCardTest >> testCardIsRegisteredOnBoardButNotInShip [
+
+	| ship1 ship2 game board card |
+	ship1 := Spaceship withName: 'Lando'.
+	ship2 := Spaceship withName: 'Han'.
+	board := Board of: 10 andWormholeAt: {  }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 1.
+
+	card := ReversePolarityCard forCell: 1.
+	ship1 addCard: card.
+
+	ship1 playCard: card inGame: game.
+
+	self assert: (board reversePolarityCards includes: card).
 	self deny: (ship1 activeCards includes: card)
 ]
 
@@ -605,7 +633,6 @@ ReversePolarityCardTest >> testInvertedWormholeAffectsOthers [
 
 	self assert: ship1 position equals: 5.
 	self assert: ship2 position equals: 8.
-	self assert: (ship1 activeCards includes: card).
 
 ]
 

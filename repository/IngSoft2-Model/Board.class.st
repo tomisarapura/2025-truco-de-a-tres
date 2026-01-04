@@ -327,8 +327,11 @@ Board >> registerShips: someShips [
 { #category : 'method' }
 Board >> reversePolarityCards [
 
-	^ self allActiveCards select: [ :card |
-		  card isKindOf: ReversePolarityCard ]
+	| allCards |
+	allCards := OrderedCollection new.
+	reversePolarityCards do: [ :cardsOnCell |
+		allCards addAll: cardsOnCell ].
+	^ allCards
 ]
 
 { #category : 'accessing' }
