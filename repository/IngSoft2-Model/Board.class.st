@@ -134,9 +134,9 @@ Board >> applyEffectTo: aSpaceship [
 	effect := self effectAt: cellPosition.
 
 	effect ifNotNil: [
-		| shouldInvert |
-		shouldInvert := self isCellInverted: cellPosition.
-		self applyEffect: effect to: aSpaceship inverted: shouldInvert ].
+		(self isCellInverted: cellPosition)
+			ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
+			ifFalse: [ effect applyTo: aSpaceship inBoard: self ] ].
 
 	^ self
 ]
