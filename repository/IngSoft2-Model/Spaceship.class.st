@@ -6,7 +6,6 @@ Class {
 		'playerName',
 		'maxFuel',
 		'fuel',
-		'lap',
 		'cards',
 		'activeCards',
 		'state',
@@ -97,7 +96,6 @@ Spaceship >> initializeWith: aName [
 	position := 0.
 	fuel := 0.
 	maxFuel := 0.
-	lap := 0.
 	cards := OrderedCollection new.
 	activeCards := OrderedCollection new.
 	state := NormalShipState new.
@@ -109,12 +107,6 @@ Spaceship >> isPenalized [
 
 	^ state isPenalized
 
-]
-
-{ #category : 'initialize' }
-Spaceship >> lap [
-
-	^ lap
 ]
 
 { #category : 'methods' }
