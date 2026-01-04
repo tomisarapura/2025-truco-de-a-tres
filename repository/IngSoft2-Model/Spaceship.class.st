@@ -68,10 +68,7 @@ Spaceship >> decreaseFuelBy: anAmount [
 { #category : 'methods' }
 Spaceship >> decreaseTurbine [
 
-	self hasAvailableTurbines ifFalse: [
-		self error: 'There are no turbines available' ].
-
-	turbines := turbines - 1
+	turbines := turbines - 1 max: 0
 ]
 
 { #category : 'methods' }

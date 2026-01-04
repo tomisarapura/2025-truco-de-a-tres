@@ -1519,7 +1519,7 @@ GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
 ]
 
 { #category : 'spaceships' }
-GameTest >> testWhenShipWithZeroTurbinesSkipsTurn [
+GameTest >> testWhenShipWithZeroTurbinesIsRemoved [
 
 	| ship1 ship2 board dice game |
 	ship1 := Spaceship withName: 'John Doe'.
@@ -1527,17 +1527,14 @@ GameTest >> testWhenShipWithZeroTurbinesSkipsTurn [
 	board := Board of: 10 andWormholeAt: #(  ).
 	dice := DiceCup with: { (Die withSides: 1) }.
 	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
+		        startWithShips: (OrderedCollection with: ship1 with: ship2)
 		        board: board
 		        dice: dice
 		        laps: 1.
-
-	ship1 instVarNamed: 'turbines' put: 0.
-
+	[ ship1 remainingTurbines > 0 ] whileTrue: [ ship1 decreaseTurbine ].
 	game playTurn.
-	self assert: game currentShip equals: ship2
+	self assert: game currentShip equals: ship2.
+	self deny: (game spaceShips includes: ship1)
 ]
 
 { #category : 'accessing' }

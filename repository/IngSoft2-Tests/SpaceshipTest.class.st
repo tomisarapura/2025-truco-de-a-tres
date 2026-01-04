@@ -335,8 +335,7 @@ SpaceshipTest >> testWhenTurbineIsZeroAndDecrementIsAttempted [
 
 	| ship |
 	ship := Spaceship withName: 'JohnDoe'.
+	3 timesRepeat: [ ship decreaseTurbine ].
 	ship decreaseTurbine.
-	ship decreaseTurbine.
-	ship decreaseTurbine.
-	self should: [ship decreaseTurbine] raise: Error.
+	self assert: ship remainingTurbines equals: 0
 ]
