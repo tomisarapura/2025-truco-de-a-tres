@@ -199,6 +199,14 @@ Board >> determineNewPositionFrom: aPosition after: steps [
 	^ self applyWormholeIfPresentAt: aPosition + steps
 ]
 
+{ #category : 'spaceships' }
+Board >> doOnAllShipsExcept: aSpaceship do: aBlock [
+
+	self shipsOnBoard
+		reject: [ :ship | ship == aSpaceship ]
+		thenDo: aBlock
+]
+
 { #category : 'deck' }
 Board >> drawCard [
 
