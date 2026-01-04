@@ -333,7 +333,9 @@ Game >> registerLapFor: aShip from: oldPosition after: someSteps [
 Game >> removeActiveCard: aCard [
 
 	spaceShips do: [ :ship |
-		ship activeCards remove: aCard ifAbsent: [  ] ]
+		ship activeCards remove: aCard ifAbsent: [  ] ].
+	(aCard isKindOf: ReversePolarityCard) ifTrue: [
+		board unregisterReversePolarityCard: aCard ]
 ]
 
 { #category : 'process actions' }

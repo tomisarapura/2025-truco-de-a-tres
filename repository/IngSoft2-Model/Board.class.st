@@ -106,8 +106,7 @@ Board class >> validateWormholes: aCollection [
 { #category : 'method' }
 Board >> activeCardsOnCell: aCell [
 
-	^ self reversePolarityCards select: [ :card |
-		  card targetCell = aCell ]
+	^ reversePolarityCards at: aCell ifAbsent: [ #() ]
 ]
 
 { #category : 'method' }
@@ -362,6 +361,16 @@ Board >> stepsFromParsecs: someParsecs [
 { #category : 'accessing' }
 Board >> totalLengthInParsecs [
     ^ totalLengthInParsecs
+]
+
+{ #category : 'method' }
+Board >> unregisterReversePolarityCard: aCard [
+
+	| cell cards |
+	cell := aCard targetCell.
+	cards := reversePolarityCards at: cell ifAbsent: [ ^ self ].
+	cards remove: aCard ifAbsent: [  ].
+	cards isEmpty ifTrue: [ reversePolarityCards removeKey: cell ]
 ]
 
 { #category : 'method' }
