@@ -241,6 +241,26 @@ BoardTest >> testCardEffectAddsCardToShip [
     self assert: ship cards size equals: 1.
 ]
 
+{ #category : 'board' }
+BoardTest >> testDoOnAllShipsExcept [
+
+	| board ship1 ship2 ship3 collected |
+	ship1 := Spaceship withName: 'S1'.
+	ship2 := Spaceship withName: 'S2'.
+	ship3 := Spaceship withName: 'S3'.
+	board := Board of: 10 andWormholeAt: #(  ).
+	board registerShips: {
+			ship1.
+			ship2.
+			ship3 }.
+	collected := OrderedCollection new.
+	board doOnAllShipsExcept: ship2 do: [ :ship | collected add: ship ].
+	self assert: collected size equals: 2.
+	self assert: (collected includes: ship1).
+	self assert: (collected includes: ship3).
+	self deny: (collected includes: ship2)
+]
+
 { #category : 'effects' }
 BoardTest >> testEffectAtHandlesAllCases [
     | board customEffect |
