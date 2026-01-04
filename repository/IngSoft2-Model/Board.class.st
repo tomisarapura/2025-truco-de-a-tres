@@ -7,7 +7,8 @@ Class {
 		'cells',
 		'totalLengthInParsecs',
 		'positionManager',
-		'shipsOnBoard'
+		'shipsOnBoard',
+		'reversePolarityCards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -245,6 +246,7 @@ Board >> initializeWithCells: aCount length: aLengthInParsecs andWormholes: aCol
 
         0 to: aCount - 1 do: [ :i |
                 cells at: i put: self randomEffect ].
+	reversePolarityCards := Dictionary new.
 
     ^ self
 ]
