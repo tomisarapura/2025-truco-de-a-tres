@@ -148,9 +148,12 @@ Board >> applyEffectTo: aSpaceship [
 	effect := self effectAt: cellPosition.
 
 	effect ifNotNil: [
-		(self isCellInverted: cellPosition)
-			ifTrue: [ effect applyInvertedTo: aSpaceship inBoard: self ]
-			ifFalse: [ effect applyTo: aSpaceship inBoard: self ] ].
+		| inversionLevel |
+		inversionLevel := self inversionLevelForCell: cellPosition.
+		self
+			applyEffect: effect
+			to: aSpaceship
+			withInversionLevel: inversionLevel ].
 
 	^ self
 ]
@@ -158,7 +161,7 @@ Board >> applyEffectTo: aSpaceship [
 { #category : 'method' }
 Board >> applyWormholeEffect: aWormhole at: aPosition [
 
-	(self isCellInverted: aPosition)
+	((self inversionLevelForCell: aPosition) = 1)
 		ifTrue: [
 			self shipsOnBoard
 				reject: [ :ship | ship position = aPosition ]
@@ -263,7 +266,7 @@ Board >> inversionLevelForCell: aCell [
 { #category : 'method' }
 Board >> isCellInverted: aCell [
 
-    ^ (self activeCardsOnCell: aCell) size odd
+    "^ (self activeCardsOnCell: aCell) size odd"
 ]
 
 { #category : 'validation' }
