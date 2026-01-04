@@ -119,14 +119,6 @@ Board >> allActiveCards [
 ]
 
 { #category : 'method' }
-Board >> applyEffect: anEffect to: aSpaceship inverted: aBoolean [
-
-	aBoolean
-		ifTrue: [ anEffect applyInvertedTo: aSpaceship inBoard: self ]
-		ifFalse: [ anEffect applyTo: aSpaceship inBoard: self ]
-]
-
-{ #category : 'method' }
 Board >> applyEffect: anEffect to: aSpaceship withInversionLevel: level [
 
 | actualLevel |
