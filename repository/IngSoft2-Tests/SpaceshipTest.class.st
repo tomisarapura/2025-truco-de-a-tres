@@ -53,16 +53,15 @@ SpaceshipTest >> testCardsReturnsCurrentCards [
 ]
 
 { #category : 'tests - instance' }
-SpaceshipTest >> testDecreaseFuelByDoesNotGoBelowZero [
+SpaceshipTest >> testDecreaseFuelByConsumesFuelWithoutPenalty [
 
-    | ship |
+	| ship |
+	ship := Spaceship withName: 'Fueler'.
+	ship increaseMaxFuelBy: 10.
+	ship restoreFuel.
 
-    ship := Spaceship withName: 'Fueler'.
-    ship instVarNamed: 'fuel' put: 5.
-    ship decreaseFuelBy: 3.
-    self assert: (ship instVarNamed: 'fuel') equals: 2.
-    ship decreaseFuelBy: 10.
-    self assert: (ship instVarNamed: 'fuel') equals: 0.
+	ship decreaseFuelBy: 5.
+	self assert: ship remainingTurbines equals: 3
 ]
 
 { #category : 'tests - instance' }
@@ -103,15 +102,13 @@ SpaceshipTest >> testHasReachedGoalWhenAtGoal [
 ]
 
 { #category : 'tests - instance' }
-SpaceshipTest >> testIncreaseMaxFuelByAddsAmount [
+SpaceshipTest >> testIncreaseMaxFuelByAddsCapacity [
 
-    | ship |
+	| ship |
+	ship := Spaceship withName: 'Booster'.
 
-    ship := Spaceship withName: 'Booster'.
-    ship instVarNamed: 'maxFuel' put: 4.
-    ship increaseMaxFuelBy: 3.
-
-    self assert: (ship instVarNamed: 'maxFuel') equals: 7.
+	ship increaseMaxFuelBy: 5.
+	ship restoreFuel
 ]
 
 { #category : 'initalize' }
@@ -167,8 +164,12 @@ SpaceshipTest >> testLosingAllFuelResultsInTurbineLoss [
 
 	| ship |
 	ship := Spaceship withName: 'John Doe'.
-	ship instVarNamed: 'fuel' put: 3.
+
+	ship increaseMaxFuelBy: 3.
+	ship restoreFuel.
+
 	self assert: ship remainingTurbines equals: 3.
+
 	ship decreaseFuelBy: 3.
 	self assert: ship remainingTurbines equals: 2
 ]
@@ -302,14 +303,19 @@ SpaceshipTest >> testRemoveCardRemovesFromHand [
 ]
 
 { #category : 'tests - instance' }
-SpaceshipTest >> testRestoreFuelRestoresToMax [
+SpaceshipTest >> testRestoreFuelRestoresToMaxCapacity [
 
-    | ship |
+	| ship |
+	ship := Spaceship withName: 'Tank'.
+	ship increaseMaxFuelBy: 5.
 
-    ship := Spaceship withName: 'Tank'.
-    ship restoreFuel.
+	ship restoreFuel.
+	ship decreaseFuelBy: 5.
+	self assert: ship remainingTurbines equals: 2.
 
-    self assert: (ship instVarNamed: 'fuel') equals: (ship instVarNamed: 'maxFuel').
+	ship restoreFuel.
+	ship decreaseFuelBy: 4.
+	self assert: ship remainingTurbines equals: 2 
 ]
 
 { #category : 'tests - instance' }
