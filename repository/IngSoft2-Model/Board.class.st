@@ -255,6 +255,12 @@ Board >> initializeWithCells: aCount length: aLengthInParsecs andWormholes: aCol
 ]
 
 { #category : 'method' }
+Board >> inversionLevelForCell: aCell [
+
+	^ (self activeCardsOnCell: aCell) size \\ 2 "Deja lugar a extensiones futuras"
+]
+
+{ #category : 'method' }
 Board >> isCellInverted: aCell [
 
     ^ (self activeCardsOnCell: aCell) size odd
