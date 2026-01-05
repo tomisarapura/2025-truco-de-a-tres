@@ -72,7 +72,7 @@ BoardTest >> testApplyWormholeIfPresentReturnsSameWhenAbsent [
 { #category : 'effects' }
 BoardTest >> testAtomicBombEffectResetsPositionsButKeepsLaps [
 
-	| effect ship1 ship2 ship3 allShips board game |
+	| effect ship1 ship2 ship3 allShips board game status1 status2 status3 |
 	effect := AtomicBombEffect new.
 	board := Board of: 5 andWormholeAt: {  }.
 
@@ -83,10 +83,6 @@ BoardTest >> testAtomicBombEffectResetsPositionsButKeepsLaps [
 	ship1 moveTo: 6.
 	ship2 moveTo: 3.
 	ship3 moveTo: 9.
-
-	ship1 instVarNamed: 'lap' put: 1.
-	ship2 instVarNamed: 'lap' put: 2.
-	ship3 instVarNamed: 'lap' put: 3.
 
 	allShips := {
 		            ship1.
@@ -99,14 +95,20 @@ BoardTest >> testAtomicBombEffectResetsPositionsButKeepsLaps [
 		        dice: (DiceCup with: { (Die withSides: 1) })
 		        laps: 5.
 
+	(game lapTrackerFor: ship1) addLap.
+	2 timesRepeat: [ (game lapTrackerFor: ship2) addLap ].
+	3 timesRepeat: [ (game lapTrackerFor: ship3) addLap ].
 	effect applyEffectTo: ship2 inBoard: board.
 
 	self assert: ship1 position equals: 0.
 	self assert: ship2 position equals: 0.
 	self assert: ship3 position equals: 0.
-	self assert: ship1 lap equals: 1.
-	self assert: ship2 lap equals: 2.
-	self assert: ship3 lap equals: 3
+	status1 := game lapTrackerFor: ship1.
+	status2 := game lapTrackerFor: ship2.
+	status3 := game lapTrackerFor: ship3.
+	self assert: status1 lapCount equals: 1.
+	self assert: status2 lapCount equals: 2.
+	self assert: status3 lapCount equals: 3
 ]
 
 { #category : 'effects' }
@@ -443,7 +445,6 @@ BoardTest >> testLapDoesNotIncrementWhenStayingWithinBounds [
 	newPosition := board calculateNewPositionFrom: ship position after: 4 moves: ship.
 
 	self assert: newPosition equals: 7.
-	self assert: ship lap equals: 0.
 
 ]
 

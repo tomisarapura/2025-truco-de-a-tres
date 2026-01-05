@@ -149,17 +149,6 @@ SpaceshipTest >> testIsPenalizedDelegatesToState [
 ]
 
 { #category : 'tests - instance' }
-SpaceshipTest >> testLapAccessorReturnsCurrentValue [
-
-    | ship |
-
-    ship := Spaceship withName: 'Lapper'.
-    ship instVarNamed: 'lap' put: 2.
-
-    self assert: ship lap equals: 2.
-]
-
-{ #category : 'tests - instance' }
 SpaceshipTest >> testLosingAllFuelResultsInTurbineLoss [
 
 	| ship |
