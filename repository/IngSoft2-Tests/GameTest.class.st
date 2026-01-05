@@ -434,19 +434,26 @@ GameTest >> testPassTurnAdvancesIndex [
 
 { #category : 'tests' }
 GameTest >> testPassTurnRestoresFuelToMax [
-    | ship1 ship2 board dice game |
-    ship1 := Spaceship withName: 'Skip'.
-    ship2 := Spaceship withName: 'Other'.
-    board := Board of: 5 andWormholeAt: {}.
-    dice := DiceCup with: { Die withSides: 1 }.
-    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
-    ship1 instVarNamed: 'maxFuel' put: 5.
-    ship1 instVarNamed: 'fuel' put: 2.
 
-    game passTurn.
-
-    self assert: (ship1 instVarNamed: 'fuel') equals: (ship1 instVarNamed: 'maxFuel').
-    self assert: game currentShip equals: ship2.
+	| ship1 ship2 board dice game |
+	
+	ship1 := Spaceship withName: 'Skip'.
+	ship2 := Spaceship withName: 'Other'.
+	board := Board of: 5 andWormholeAt: {  }.
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	ship1 increaseMaxFuelBy: 5.
+	ship1 restoreFuel.
+	ship1 decreaseFuelBy: 3.
+	game passTurn.
+	self assert: ship1 fuel equals: ship1 maxFuel.
+	self assert: game currentShip equals: ship2
 ]
 
 { #category : 'tests' }
@@ -1532,8 +1539,7 @@ GameTest >> testWhenShipTriesToPlayOutOfTurnThenError [
 { #category : 'spaceships' }
 GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
 
-
-        | spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame totalLaps game |
+	| spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame totalLaps game |
 	dice1 := Die withSides: 1.
 	dicesGame := DiceCup with: (OrderedCollection with: dice1).
 
@@ -1543,18 +1549,18 @@ GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
 
 	boardGame := Board of: 3 andWormholeAt: #(  ).
 
-        totalLaps := 3.
+	totalLaps := 3.
 
 
-        game := Game
-                        startWithShips: spaceShipsGame
-                        board: boardGame
-                        dice: dicesGame
-                        laps: totalLaps.
+	game := Game
+		        startWithShips: spaceShipsGame
+		        board: boardGame
+		        dice: dicesGame
+		        laps: totalLaps.
 
-        game playUntilFinish.
-        self assert: (game lapTrackerFor: spaceShip1) lapCount equals: 3.
-        self assert: (game hasWonByLaps: spaceShip1)
+	game playUntilFinish.
+	self assert: (game lapTrackerFor: spaceShip1) lapCount equals: 3.
+	self assert: (game hasWonByLaps: spaceShip1)
 ]
 
 { #category : 'spaceships' }

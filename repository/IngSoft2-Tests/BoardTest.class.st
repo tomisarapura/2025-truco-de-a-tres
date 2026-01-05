@@ -18,21 +18,15 @@ BoardTest >> should: anErrorBlock raise: anErrorClass withMessageText: errorMess
 { #category : 'effects' }
 BoardTest >> testApplyEffectToDoesNothingIfNoEffect [
 
-    | board ship cells |
+	| board ship |
+	ship := Spaceship withName: 'Ship'.
+	ship moveTo: 2.
+	board := Board of: 5 andWormholeAt: {  }.
+	board assignEffect: NoEffect new toCell: 2.
+	board registerShips: { ship }.
+	board applyEffectTo: ship.
 
-    ship := Spaceship withName: 'Ship'.
-    ship moveTo: 2.
-
-    board := Board of: 5 andWormholeAt: {}.
-
-    cells := (1 to: 5) collect: [:i | nil].
-    board instVarNamed: 'cells' put: cells asArray.
-    board registerShips: { ship }.
-
-    board applyEffectTo: ship.
-
-    self assert: ship position equals: 2.
-
+	self assert: ship position equals: 2
 ]
 
 { #category : 'tests - instance' }

@@ -70,6 +70,12 @@ Spaceship >> decreaseTurbine [
 	turbines := turbines - 1 max: 0
 ]
 
+{ #category : 'accessing' }
+Spaceship >> fuel [
+
+	^ fuel
+]
+
 { #category : 'methods' }
 Spaceship >> hasAvailableTurbines [
 
@@ -107,6 +113,12 @@ Spaceship >> isPenalized [
 
 	^ state isPenalized
 
+]
+
+{ #category : 'accessing' }
+Spaceship >> maxFuel [
+
+	^ maxFuel
 ]
 
 { #category : 'methods' }

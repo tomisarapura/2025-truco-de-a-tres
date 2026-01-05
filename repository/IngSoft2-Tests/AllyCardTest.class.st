@@ -14,7 +14,7 @@ AllyCardTest >> testActivateForAddsCardToOwnerAndAlly [
     card activateFor: owner inGame: nil.
     self assert: (owner activeCards includes: card).
     self assert: (ally activeCards includes: card).
-    self assert: (card instVarNamed: 'ownerShip') equals: owner.
+    self assert: (card allyFor: ally) equals: owner.
 ]
 
 { #category : 'tests' }
