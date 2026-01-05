@@ -98,23 +98,23 @@ HyperJumpEffectTest >> testHyperJumpCyclesThroughAllJumpValues [
 
 { #category : 'tests' }
 HyperJumpEffectTest >> testHyperJumpEffectWithValuesInitializesCorrectly [
-        | values effect |
-        values := #(1 3 5).
-        effect := HyperJumpEffect withValues: values.
 
-        self assert: (effect perform: #values) equals: #(5 3 1).
+	| values effect |
+	values := #( 1 3 5 ).
+	effect := HyperJumpEffect withValues: values.
+
+	self assert: effect values equals: #( 5 3 1 )
 ]
 
 { #category : 'tests' }
 HyperJumpEffectTest >> testInitializeWithSetsJumpValuesAndIndex [
 
 	| values effect |
-        values := #(3 5 7).
-        effect := HyperJumpEffect new initializeWith: values.
+	values := #( 3 5 7 ).
+	effect := HyperJumpEffect new initializeWith: values.
 
-        self assert: (effect instVarNamed: 'jumpValues') equals: #(7 5 3).
-        self assert: (effect instVarNamed: 'currentIndex') equals: 1.
-
+	self assert: effect values equals: #( 7 5 3 ).
+	self assert: effect peekJumpValue equals: 7
 ]
 
 { #category : 'tests' }
