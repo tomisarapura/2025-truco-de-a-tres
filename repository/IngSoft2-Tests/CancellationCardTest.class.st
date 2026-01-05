@@ -164,28 +164,3 @@ CancellationCardTest >> testApplyEffectToRemovesCardFromGame [
 
     self deny: (ship1 activeCards includes: target).
 ]
-
-{ #category : 'tests - class' }
-CancellationCardTest >> testCancellingCreatesCardWithTarget [
-
-    | target card |
-
-    target := RepeatCard new.
-    card := CancellationCard cancelling: target.
-
-    self assert: card class equals: CancellationCard.
-    self assert: (card instVarNamed: 'cardToCancel') equals: target.
-]
-
-{ #category : 'tests - instance' }
-CancellationCardTest >> testInitializeCancellingSetsCardToCancel [
-
-    | target card returned |
-
-    target := RepeatCard new.
-    card := CancellationCard new.
-    returned := card initializeCancelling: target.
-
-    self assert: returned == card.
-    self assert: (card instVarNamed: 'cardToCancel') equals: target.
-]

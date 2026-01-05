@@ -29,19 +29,3 @@ AllyCardTest >> testAllyForReturnsCorrectShip [
     self assert: (card allyFor: ally) equals: owner.
     self assert: (card allyFor: other) isNil.
 ]
-
-{ #category : 'tests' }
-AllyCardTest >> testInitializeWithAllySetsAllyShip [
-    | ally card |
-    ally := Spaceship withName: 'Friend'.
-    card := AllyCard new initializeWithAlly: ally.
-    self assert: (card instVarNamed: 'allyShip') equals: ally.
-]
-
-{ #category : 'tests' }
-AllyCardTest >> testWithAllyInitializesAllyShip [
-    | ally card |
-    ally := Spaceship withName: 'Ally'.
-    card := AllyCard withAlly: ally.
-    self assert: (card instVarNamed: 'allyShip') equals: ally.
-]

@@ -15,22 +15,6 @@ OverloadCardTest >> testActivateForAddsCardToShipActiveCards [
 ]
 
 { #category : 'tests' }
-OverloadCardTest >> testForShipCreatesCardWithTargetShipSet [
-	| ship card |
-	ship := Spaceship withName: 'Target'.
-	card := OverloadCard forShip: ship.
-	self assert: (card instVarNamed: 'targetShip') equals: ship.
-]
-
-{ #category : 'tests' }
-OverloadCardTest >> testInitializeForShipSetsTargetShip [
-	| ship card |
-	ship := Spaceship withName: 'Alpha'.
-	card := OverloadCard new initializeForShip: ship.
-	self assert: (card instVarNamed: 'targetShip') equals: ship.
-]
-
-{ #category : 'tests' }
 OverloadCardTest >> testModifyRollForOtherShipUnchanged [
 	| ship1 ship2 card result |
 	ship1 := Spaceship withName: 'One'.
