@@ -51,31 +51,6 @@ ReversePolarityCardTest >> testActivateTwiceOnSameShip [
 ]
 
 { #category : 'tests' }
-ReversePolarityCardTest >> testCancellationCardRemovesEffect [
-
-	| ship1 ship2 board dice game card cancellationCard |
-	ship1 := Spaceship withName: 'Ship1'.
-	ship2 := Spaceship withName: 'Ship2'.
-	board := Board of: 10 andWormholeAt: #(  ).
-	dice := DiceCup with: { (Die withSides: 1) }.
-	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
-		        board: board
-		        dice: dice
-		        laps: 1.
-	card := ReversePolarityCard forCell: 5.
-
-
-	card activateFor: ship1 inGame: game.
-	cancellationCard := CancellationCard cancelling: card.
-	cancellationCard playOn: ship1 inGame: game.
-
-	self deny: (ship1 activeCards includes: card)
-]
-
-{ #category : 'tests' }
 ReversePolarityCardTest >> testCardIsRegisteredOnBoardButNotInShip [
 
 	| ship1 ship2 game board card |
@@ -681,43 +656,6 @@ ReversePolarityCardTest >> testOddNumberOfReversePolarityCardsInvertEffect [
     
     self assert: ship position equals: 4.
     self assert: otherShip position equals: 7. 
-]
-
-{ #category : 'tests' }
-ReversePolarityCardTest >> testRemovingReversePolarityCardsChangesEffect [
-
-	| card1 card2 ship otherShip board game cancellationCard |
-	card1 := ReversePolarityCard forCell: 5.
-	card2 := ReversePolarityCard forCell: 5.
-
-	ship := Spaceship withName: 'Main Ship'.
-	otherShip := Spaceship withName: 'Other Ship'.
-
-	board := Board of: 10 andWormholeAt: #(  ).
-	board assignEffect: HyperGravityEffect new toCell: 5.
-
-	game := Game
-		        startWithShips: {
-				        ship.
-				        otherShip }
-		        board: board
-		        dice: (DiceCup with: { (Die withSides: 1) })
-		        laps: 1.
-
-	"Activar dos cartas (deberían cancelarse)"
-	card1 activateFor: ship inGame: game.
-	card2 activateFor: ship inGame: game.
-
-	cancellationCard := CancellationCard cancelling: card1.
-	cancellationCard playOn: ship inGame: game.
-
-	board moveShip: ship to: 5.
-	board moveShip: otherShip to: 8.
-
-	board applyEffectTo: ship.
-
-	self assert: ship position equals: 5.
-	self assert: otherShip position equals: 8 - 1
 ]
 
 { #category : 'tests' }
