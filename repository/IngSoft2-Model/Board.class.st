@@ -119,47 +119,35 @@ Board >> allActiveCards [
 ]
 
 { #category : 'method' }
-Board >> applyEffect: anEffect to: aSpaceship withInversionLevel: level [
+Board >> applyEffect: anEffect to: aSpaceship withInversionMode: anInversionMode [
 
-| actualLevel |
-	actualLevel := level \\ 2. "Por ahora usamos módulo 2 porque hay 2 opciones (par = normal, impar = invertido)"
-	
-	actualLevel = 0 ifTrue: [ "level = 0: efecto normal"
-		anEffect applyTo: aSpaceship inBoard: self ].
-	actualLevel = 1 ifTrue: [  "level = 1: efecto invertido"
-		anEffect applyInvertedTo: aSpaceship inBoard: self ].
-	
-	
+	anInversionMode applyEffect: anEffect to: aSpaceship inBoard: self
 ]
 
 { #category : 'method' }
 Board >> applyEffectTo: aSpaceship [
 
-	| cellPosition effect |
+	| cellPosition effect inversionMode |
 	cellPosition := self positionOf: aSpaceship.
 	effect := self effectAt: cellPosition.
-
 	effect ifNotNil: [
-		| inversionLevel |
-		inversionLevel := self inversionLevelForCell: cellPosition.
+		inversionMode := self inversionModeForCell: cellPosition.
 		self
 			applyEffect: effect
 			to: aSpaceship
-			withInversionLevel: inversionLevel ].
-
+			withInversionMode: inversionMode ].
 	^ self
 ]
 
 { #category : 'method' }
 Board >> applyWormholeEffect: aWormhole at: aPosition [
 
-	((self inversionLevelForCell: aPosition) = 1)
-		ifTrue: [
-			self shipsOnBoard
-				reject: [ :ship | ship position = aPosition ]
-				thenDo: [ :ship | self moveShip: ship to: aWormhole exit ].
-			^ aPosition ]
-		ifFalse: [ ^ aWormhole exit ]
+	| inversionMode |
+	inversionMode := self inversionModeForCell: aPosition.
+	^ inversionMode
+		  applyWormholeEffect: aWormhole
+		  at: aPosition
+		  inBoard: self
 ]
 
 { #category : 'method' }
@@ -251,9 +239,13 @@ Board >> initializeWithCells: aCount length: aLengthInParsecs andWormholes: aCol
 ]
 
 { #category : 'method' }
-Board >> inversionLevelForCell: aCell [
+Board >> inversionModeForCell: aCell [
 
-	^ (self activeCardsOnCell: aCell) size \\ 2 "Deja lugar a extensiones futuras"
+	| count |
+	count := (self activeCardsOnCell: aCell) size.
+	^ count \\ 2 = 0
+		  ifTrue: [ NormalInversionMode new ]
+		  ifFalse: [ InvertedInversionMode new ]
 ]
 
 { #category : 'validation' }
