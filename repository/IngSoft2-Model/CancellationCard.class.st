@@ -15,6 +15,10 @@ CancellationCard class >> cancelling: aCard [
 
 { #category : 'playing' }
 CancellationCard >> applyEffectTo: aShip inGame: aGame [
+
+	(aGame activeCards includes: cardToCancel) ifFalse: [
+		self error: 'Cannot cancel a card that is not active in the game' ].
+
 	aGame removeActiveCard: cardToCancel
 ]
 

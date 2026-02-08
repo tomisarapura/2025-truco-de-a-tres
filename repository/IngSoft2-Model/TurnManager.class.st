@@ -45,6 +45,17 @@ TurnManager >> initializeWithShips: someShips [
 ]
 
 { #category : 'accessing' }
+TurnManager >> remove: aShip [
+
+	| index |
+	(ships includes: aShip) ifFalse: [ ^ self ].
+	index := ships indexOf: aShip.
+	ships := ships copyWithout: aShip.
+	index < currentIndex ifTrue: [ currentIndex := currentIndex - 1 ].
+	currentIndex > ships size ifTrue: [ currentIndex := 1 ]
+]
+
+{ #category : 'accessing' }
 TurnManager >> turn [
 
 	^ turn

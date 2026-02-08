@@ -25,7 +25,7 @@ ReversePolarityCard class >> validateCell: aCell [
 { #category : 'playing' }
 ReversePolarityCard >> activateFor: aShip inGame: aGame [
 
-	aShip addActiveCard: self
+	aGame board registerReversePolarityCard: self forCell: targetCell
 ]
 
 { #category : 'initialize' }

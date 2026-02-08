@@ -80,6 +80,45 @@ GameTest >> testAdvanceTurnRotatesToNextShip [
 
 ]
 
+{ #category : 'spaceships' }
+GameTest >> testAtomicBombEffectResetsPositionsButKeepsLaps [
+
+	| effect ship1 ship2 ship3 allShips board game status1 status2 status3 |
+	effect := AtomicBombEffect new.
+	board := Board of: 5 andWormholeAt: {  }.
+	ship1 := Spaceship withName: 'Red'.
+	ship2 := Spaceship withName: 'Blue'.
+	ship3 := Spaceship withName: 'Green'.
+	ship1 moveTo: 6.
+	ship2 moveTo: 3.
+	ship3 moveTo: 9.
+	
+	allShips := { ship1. ship2. ship3 }.
+	game := Game
+		        startWithShips: allShips
+		        board: board
+		        dice: (DiceCup with: { (Die withSides: 1) })
+		        laps: 5.
+	
+	(game lapTrackerFor: ship1) addLap.
+	2 timesRepeat: [ (game lapTrackerFor: ship2) addLap ].
+	3 timesRepeat: [ (game lapTrackerFor: ship3) addLap ].
+	
+	effect applyEffectTo: ship2 inBoard: board.
+	
+	self assert: ship1 position equals: 0.
+	self assert: ship2 position equals: 0.
+	self assert: ship3 position equals: 0.
+	
+	status1 := game lapTrackerFor: ship1.
+	status2 := game lapTrackerFor: ship2.
+	status3 := game lapTrackerFor: ship3.
+	
+	self assert: status1 lapCount equals: 1.
+	self assert: status2 lapCount equals: 2.
+	self assert: status3 lapCount equals: 3
+]
+
 { #category : 'accessing' }
 GameTest >> testBoardAccessorReturnsBoard [
     | ship1 ship2 board dice game |
@@ -395,19 +434,26 @@ GameTest >> testPassTurnAdvancesIndex [
 
 { #category : 'tests' }
 GameTest >> testPassTurnRestoresFuelToMax [
-    | ship1 ship2 board dice game |
-    ship1 := Spaceship withName: 'Skip'.
-    ship2 := Spaceship withName: 'Other'.
-    board := Board of: 5 andWormholeAt: {}.
-    dice := DiceCup with: { Die withSides: 1 }.
-    game := Game startWithShips: { ship1. ship2 } board: board dice: dice laps: 1.
-    ship1 instVarNamed: 'maxFuel' put: 5.
-    ship1 instVarNamed: 'fuel' put: 2.
 
-    game passTurn.
-
-    self assert: (ship1 instVarNamed: 'fuel') equals: (ship1 instVarNamed: 'maxFuel').
-    self assert: game currentShip equals: ship2.
+	| ship1 ship2 board dice game |
+	
+	ship1 := Spaceship withName: 'Skip'.
+	ship2 := Spaceship withName: 'Other'.
+	board := Board of: 5 andWormholeAt: {  }.
+	dice := DiceCup with: { (Die withSides: 1) }.
+	game := Game
+		        startWithShips: {
+				        ship1.
+				        ship2 }
+		        board: board
+		        dice: dice
+		        laps: 1.
+	ship1 increaseMaxFuelBy: 5.
+	ship1 restoreFuel.
+	ship1 decreaseFuelBy: 3.
+	game passTurn.
+	self assert: ship1 fuel equals: ship1 maxFuel.
+	self assert: game currentShip equals: ship2
 ]
 
 { #category : 'tests' }
@@ -1493,8 +1539,7 @@ GameTest >> testWhenShipTriesToPlayOutOfTurnThenError [
 { #category : 'spaceships' }
 GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
 
-
-        | spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame totalLaps game |
+	| spaceShip1 spaceShip2 spaceShipsGame dice1 dicesGame boardGame totalLaps game |
 	dice1 := Die withSides: 1.
 	dicesGame := DiceCup with: (OrderedCollection with: dice1).
 
@@ -1504,22 +1549,22 @@ GameTest >> testWhenShipWinsByCompletingRequiredLapsThenEndsGame [
 
 	boardGame := Board of: 3 andWormholeAt: #(  ).
 
-        totalLaps := 3.
+	totalLaps := 3.
 
 
-        game := Game
-                        startWithShips: spaceShipsGame
-                        board: boardGame
-                        dice: dicesGame
-                        laps: totalLaps.
+	game := Game
+		        startWithShips: spaceShipsGame
+		        board: boardGame
+		        dice: dicesGame
+		        laps: totalLaps.
 
-        game playUntilFinish.
-        self assert: (game lapTrackerFor: spaceShip1) lapCount equals: 3.
-        self assert: (game hasWonByLaps: spaceShip1)
+	game playUntilFinish.
+	self assert: (game lapTrackerFor: spaceShip1) lapCount equals: 3.
+	self assert: (game hasWonByLaps: spaceShip1)
 ]
 
 { #category : 'spaceships' }
-GameTest >> testWhenShipWithZeroTurbinesSkipsTurn [
+GameTest >> testWhenShipWithZeroTurbinesIsRemoved [
 
 	| ship1 ship2 board dice game |
 	ship1 := Spaceship withName: 'John Doe'.
@@ -1527,17 +1572,14 @@ GameTest >> testWhenShipWithZeroTurbinesSkipsTurn [
 	board := Board of: 10 andWormholeAt: #(  ).
 	dice := DiceCup with: { (Die withSides: 1) }.
 	game := Game
-		        startWithShips: {
-				        ship1.
-				        ship2 }
+		        startWithShips: (OrderedCollection with: ship1 with: ship2)
 		        board: board
 		        dice: dice
 		        laps: 1.
-
-	ship1 instVarNamed: 'turbines' put: 0.
-
+	[ ship1 remainingTurbines > 0 ] whileTrue: [ ship1 decreaseTurbine ].
 	game playTurn.
-	self assert: game currentShip equals: ship2
+	self assert: game currentShip equals: ship2.
+	self deny: (game spaceShips includes: ship1)
 ]
 
 { #category : 'accessing' }

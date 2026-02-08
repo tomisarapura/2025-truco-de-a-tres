@@ -6,7 +6,6 @@ Class {
 		'playerName',
 		'maxFuel',
 		'fuel',
-		'lap',
 		'cards',
 		'activeCards',
 		'state',
@@ -68,10 +67,13 @@ Spaceship >> decreaseFuelBy: anAmount [
 { #category : 'methods' }
 Spaceship >> decreaseTurbine [
 
-	self hasAvailableTurbines ifFalse: [
-		self error: 'There are no turbines available' ].
+	turbines := turbines - 1 max: 0
+]
 
-	turbines := turbines - 1
+{ #category : 'accessing' }
+Spaceship >> fuel [
+
+	^ fuel
 ]
 
 { #category : 'methods' }
@@ -100,7 +102,6 @@ Spaceship >> initializeWith: aName [
 	position := 0.
 	fuel := 0.
 	maxFuel := 0.
-	lap := 0.
 	cards := OrderedCollection new.
 	activeCards := OrderedCollection new.
 	state := NormalShipState new.
@@ -114,10 +115,10 @@ Spaceship >> isPenalized [
 
 ]
 
-{ #category : 'initialize' }
-Spaceship >> lap [
+{ #category : 'accessing' }
+Spaceship >> maxFuel [
 
-	^ lap
+	^ maxFuel
 ]
 
 { #category : 'methods' }

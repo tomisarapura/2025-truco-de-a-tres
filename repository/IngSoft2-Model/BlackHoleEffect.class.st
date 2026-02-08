@@ -19,8 +19,7 @@ BlackHoleEffect >> applyEffectTo: aSpaceship inBoard: aBoard [
 { #category : 'operations' }
 BlackHoleEffect >> applyInvertedTo: aSpaceship inBoard: aBoard [
 
-	aBoard shipsOnBoard do: [ :ship |
-		ship == aSpaceship ifFalse: [
-			self applyEffectTo: ship inBoard: aBoard ] ].
-	^ self
+	aBoard doOnAllShipsExcept: aSpaceship do: [ :otherShip |
+        self applyEffectTo: otherShip inBoard: aBoard ].
+    ^ self
 ]

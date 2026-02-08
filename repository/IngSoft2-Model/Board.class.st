@@ -7,7 +7,8 @@ Class {
 		'cells',
 		'totalLengthInParsecs',
 		'positionManager',
-		'shipsOnBoard'
+		'shipsOnBoard',
+		'reversePolarityCards'
 	],
 	#category : 'IngSoft2-Model',
 	#package : 'IngSoft2-Model'
@@ -105,8 +106,7 @@ Board class >> validateWormholes: aCollection [
 { #category : 'method' }
 Board >> activeCardsOnCell: aCell [
 
-	^ self reversePolarityCards select: [ :card |
-		  card targetCell = aCell ]
+	^ reversePolarityCards at: aCell ifAbsent: [ #() ]
 ]
 
 { #category : 'method' }
@@ -119,38 +119,35 @@ Board >> allActiveCards [
 ]
 
 { #category : 'method' }
-Board >> applyEffect: anEffect to: aSpaceship inverted: aBoolean [
+Board >> applyEffect: anEffect to: aSpaceship withInversionMode: anInversionMode [
 
-	aBoolean
-		ifTrue: [ anEffect applyInvertedTo: aSpaceship inBoard: self ]
-		ifFalse: [ anEffect applyTo: aSpaceship inBoard: self ]
+	anInversionMode applyEffect: anEffect to: aSpaceship inBoard: self
 ]
 
 { #category : 'method' }
 Board >> applyEffectTo: aSpaceship [
 
-	| cellPosition effect |
+	| cellPosition effect inversionMode |
 	cellPosition := self positionOf: aSpaceship.
 	effect := self effectAt: cellPosition.
-
 	effect ifNotNil: [
-		| shouldInvert |
-		shouldInvert := self isCellInverted: cellPosition.
-		self applyEffect: effect to: aSpaceship inverted: shouldInvert ].
-
+		inversionMode := self inversionModeForCell: cellPosition.
+		self
+			applyEffect: effect
+			to: aSpaceship
+			withInversionMode: inversionMode ].
 	^ self
 ]
 
 { #category : 'method' }
 Board >> applyWormholeEffect: aWormhole at: aPosition [
 
-	(self isCellInverted: aPosition)
-		ifTrue: [
-			self shipsOnBoard do: [ :ship |
-				ship position = aPosition ifFalse: [
-					self moveShip: ship to: aWormhole exit ] ].
-			^ aPosition ]
-		ifFalse: [ ^ aWormhole exit ]
+	| inversionMode |
+	inversionMode := self inversionModeForCell: aPosition.
+	^ inversionMode
+		  applyWormholeEffect: aWormhole
+		  at: aPosition
+		  inBoard: self
 ]
 
 { #category : 'method' }
@@ -199,6 +196,14 @@ Board >> determineNewPositionFrom: aPosition after: steps [
 	^ self applyWormholeIfPresentAt: aPosition + steps
 ]
 
+{ #category : 'spaceships' }
+Board >> doOnAllShipsExcept: aSpaceship do: aBlock [
+
+	self shipsOnBoard
+		reject: [ :ship | ship == aSpaceship ]
+		thenDo: aBlock
+]
+
 { #category : 'deck' }
 Board >> drawCard [
 
@@ -228,14 +233,19 @@ Board >> initializeWithCells: aCount length: aLengthInParsecs andWormholes: aCol
 
         0 to: aCount - 1 do: [ :i |
                 cells at: i put: self randomEffect ].
+	reversePolarityCards := Dictionary new.
 
     ^ self
 ]
 
 { #category : 'method' }
-Board >> isCellInverted: aCell [
+Board >> inversionModeForCell: aCell [
 
-    ^ (self activeCardsOnCell: aCell) size odd
+	| count |
+	count := (self activeCardsOnCell: aCell) size.
+	^ count \\ 2 = 0
+		  ifTrue: [ NormalInversionMode new ]
+		  ifFalse: [ InvertedInversionMode new ]
 ]
 
 { #category : 'validation' }
@@ -288,6 +298,16 @@ Board >> randomEffect [
 
 ]
 
+{ #category : 'method' }
+Board >> registerReversePolarityCard: aCard forCell: aCell [
+
+	| cards |
+	cards := reversePolarityCards
+		         at: aCell
+		         ifAbsentPut: [ OrderedCollection new ].
+	cards add: aCard
+]
+
 { #category : 'spaceships' }
 Board >> registerShips: someShips [
 
@@ -299,8 +319,11 @@ Board >> registerShips: someShips [
 { #category : 'method' }
 Board >> reversePolarityCards [
 
-	^ self allActiveCards select: [ :card |
-		  card isKindOf: ReversePolarityCard ]
+	| allCards |
+	allCards := OrderedCollection new.
+	reversePolarityCards do: [ :cardsOnCell |
+		allCards addAll: cardsOnCell ].
+	^ allCards
 ]
 
 { #category : 'accessing' }
@@ -333,6 +356,25 @@ Board >> stepsFromParsecs: someParsecs [
 { #category : 'accessing' }
 Board >> totalLengthInParsecs [
     ^ totalLengthInParsecs
+]
+
+{ #category : 'method' }
+Board >> unregisterReversePolarityCard: aCard [
+
+	| cell cards |
+	cell := aCard targetCell.
+	cards := reversePolarityCards at: cell ifAbsent: [ ^ self ].
+	cards remove: aCard ifAbsent: [  ].
+	cards isEmpty ifTrue: [ reversePolarityCards removeKey: cell ]
+]
+
+{ #category : 'method' }
+Board >> unregisterReversePolarityCard: aCard forCell: aCell [
+
+	| cards |
+	cards := reversePolarityCards at: aCell ifAbsent: [ ^ self ].
+	cards remove: aCard ifAbsent: [  ].
+	cards isEmpty ifTrue: [ reversePolarityCards removeKey: aCell ]
 ]
 
 { #category : 'method' }

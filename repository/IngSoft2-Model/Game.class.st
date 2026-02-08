@@ -264,8 +264,11 @@ Game >> penaltyShip [
 Game >> playTurn [
 
 	self ensureGameIsNotOver.
+	self currentShip hasAvailableTurbines ifFalse: [
+		self removeCurrentShip.
+		self playTurn.
+		^ self ].
 	self handlePenaltyOrPassIfNeeded ifTrue: [ ^ self ].
-	self currentShip hasAvailableTurbines ifFalse: [ ^ self passTurn ].
 	self rollAndMoveCurrentShip.
 
 	self
@@ -333,7 +336,18 @@ Game >> registerLapFor: aShip from: oldPosition after: someSteps [
 Game >> removeActiveCard: aCard [
 
 	spaceShips do: [ :ship |
-		ship activeCards remove: aCard ifAbsent: [  ] ]
+		ship activeCards remove: aCard ifAbsent: [  ] ].
+	(aCard isKindOf: ReversePolarityCard) ifTrue: [
+		board unregisterReversePolarityCard: aCard ]
+]
+
+{ #category : 'process actions' }
+Game >> removeCurrentShip [
+
+	| shipToRemove |
+	shipToRemove := self currentShip.
+	turnManager remove: shipToRemove.
+	spaceShips remove: shipToRemove
 ]
 
 { #category : 'process actions' }
